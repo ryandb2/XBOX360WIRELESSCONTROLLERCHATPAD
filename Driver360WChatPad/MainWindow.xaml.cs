@@ -17,6 +17,7 @@ using System.Windows.Threading;
 using System.Threading;
 using System.Data;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Diagnostics;
 namespace Driver360WChatPad
 {
     public partial class MainWindow : Window
@@ -44,12 +45,7 @@ namespace Driver360WChatPad
         {
             InitializeComponent();
             jController = new JoystickController();
-
             cController = new ChatpadController();
-            ChatPadMappings.DataContext = cController.dt;
-            ChatPadMappings.ItemsSource = cController.dt.DefaultView;
-            ChatPadMappings.AutoGenerateColumns = true;
-
             MyUsbFinder = new UsbDeviceFinder(1118, 1817);
             timer.Tick += new EventHandler(dispatcherTimer_Tick);
             timer.Interval = new TimeSpan(0, 0, 0, 1, 0);
@@ -372,6 +368,39 @@ namespace Driver360WChatPad
         private void TurnOffController_Click(object sender, RoutedEventArgs e){SendDataToDevice(InputValidation.TurnOffController(), "Controller Off");}
         private void TextBoxLogClear_Click(object sender, RoutedEventArgs e){textBoxLog.Clear();}
         private void DisableKeepAlive_Click(object sender, RoutedEventArgs e){enableKeepAlive = !enableKeepAlive;}
+
+        private void image3_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Close();
+        }
+
+        private void image4_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (WindowState == WindowState.Maximized)
+            {
+                WindowState = WindowState.Normal;
+            }
+            else
+            {
+                WindowState = WindowState.Maximized;
+            }
+        }
+
+        private void image5_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            WindowState = WindowState.Minimized;
+        }
+
+        private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            DragMove();
+        }
+
+        private void image2_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            //Go to 
+            Process.Start("http://www.thepocketofresistance.com/");
+        }
     }
 
         ////   private void ChatPadAuthorization()

@@ -1,51 +1,42 @@
 ﻿<Window x:Class="Driver360WChatPad.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="MainWindow" Height="873" Width="1360">
-    <Grid Height="822" Width="1346">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="324*" />
-            <RowDefinition Height="476*" />
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="21*" />
-            <ColumnDefinition Width="1179*" />
-        </Grid.ColumnDefinitions>
-        <Button Content="Disable Controller" Height="27" HorizontalAlignment="Left" Margin="950,218,0,0" Name="button3" VerticalAlignment="Top" Width="115" Grid.Column="1" Click="TurnOffController_Click" Grid.Row="1" />
-        <TextBox Height="753" HorizontalAlignment="Left" Margin="0,0,0,35" Name="textBoxLog" VerticalAlignment="Bottom" Width="728" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" AcceptsTab="True" AcceptsReturn="True" Grid.ColumnSpan="2" Grid.RowSpan="2" FontSize="10" UseLayoutRounding="True" MaxLines="100" />
-        <Button Content="Clear" Height="29" HorizontalAlignment="Left" Margin="0,460,0,0" Name="button4" VerticalAlignment="Top" Width="556" Grid.ColumnSpan="2" Click="TextBoxLogClear_Click" Grid.Row="1" />
-        <Button Content="Recursive Loop This Bitch" Height="29" HorizontalAlignment="Left" Margin="710,248,0,0" Name="button5" VerticalAlignment="Top" Width="596" Click="LoopAndSendToDevice_Click" Grid.Column="1" Grid.Row="1" />
-        <TextBox Height="27" HorizontalAlignment="Left" Margin="-4,4,0,0" Name="textBox1" VerticalAlignment="Top" Width="40" Text="0" Grid.ColumnSpan="2" />
-        <TextBox Height="27" HorizontalAlignment="Left" Margin="18,4,0,0" Name="textBox2" VerticalAlignment="Top" Width="40" Text="0" Grid.Column="1" />
-        <TextBox Height="27" HorizontalAlignment="Left" Margin="64,4,0,0" Name="textBox3" VerticalAlignment="Top" Width="40" Text="0" Grid.Column="1" />
-        <TextBox Height="27" HorizontalAlignment="Left" Margin="110,4,0,0" Name="textBox4" VerticalAlignment="Top" Width="40" Text="0" Grid.Column="1" />
-        <Button Content="Send Binary" Height="27" HorizontalAlignment="Left" Margin="340,4,0,0" Name="button6" VerticalAlignment="Top" Width="230" Grid.Column="1" Click="SendTextBoxToDevice_Click" />
-        <Image Height="472" HorizontalAlignment="Left" Margin="708,68,0,0" Name="image1" Stretch="Fill" VerticalAlignment="Top" Width="603" Source="/Driver360WChatPad;component/Images/ChatPad_Controller_Straight_Up_00002.jpg" Grid.Column="1" Grid.RowSpan="2" />
-        <Button Content="Button" Height="22" HorizontalAlignment="Left" Margin="831,127,0,0" Name="button7" VerticalAlignment="Top" Width="33" Foreground="{x:Null}" ForceCursor="True" Background="{x:Null}" Grid.Column="1" Click="CapsLock_Click" Grid.Row="1" />
-        <Button Background="{x:Null}" Content="Button" ForceCursor="True" Foreground="{x:Null}" Height="18" HorizontalAlignment="Left" Margin="843,154,0,0" Name="GreenSquare" VerticalAlignment="Top" Width="26" Click="GreenSquare_Click" Grid.Column="1" Grid.Row="1" />
-        <Button Background="{x:Null}" Content="Button" ForceCursor="True" Foreground="{x:Null}" Height="18" HorizontalAlignment="Left" Margin="875,156,0,0" Name="People" VerticalAlignment="Top" Width="32" Click="People_Click" Grid.Column="1" Grid.Row="1" />
-        <Button Background="{x:Null}" Content="Button" ForceCursor="True" Foreground="{x:Null}" Height="18" HorizontalAlignment="Left" Margin="1135,154,0,0" Name="OrangeCircle" VerticalAlignment="Top" Width="24" Click="OrangeCircle_Click" Grid.Column="1" Grid.Row="1" />
-        <Button Content="Enable Backlight" Height="27" HorizontalAlignment="Left" Margin="708,218,0,0" Name="Backlight" VerticalAlignment="Top" Width="117" Grid.Column="1" Click="EnableBacklight_Click" Grid.Row="1" />
-        <Button Content="Button" Height="39" HorizontalAlignment="Left" Margin="961,150,0,0" Name="Player1" VerticalAlignment="Top" Width="39" Foreground="{x:Null}" Background="{x:Null}" Click="Player1_Click" Grid.Column="1" />
-        <Button Background="{x:Null}" Content="Button" Foreground="{x:Null}" Height="39" HorizontalAlignment="Left" Margin="998,150,0,0" Name="Player2" VerticalAlignment="Top" Width="39" Click="Player2_Click" Grid.Column="1" />
-        <Button Background="{x:Null}" Content="Button" Foreground="{x:Null}" Height="39" HorizontalAlignment="Left" Margin="961,188,0,0" Name="player3" VerticalAlignment="Top" Width="39" Grid.Column="1" Click="Player3_Click" />
-        <Button Background="{x:Null}" Content="Button" Foreground="{x:Null}" Height="39" HorizontalAlignment="Left" Margin="998,188,0,0" Name="Player4" VerticalAlignment="Top" Width="39" Grid.Column="1" Click="Player4_Click" />
-        <Button Content="Player Search" Grid.Column="1" Height="32" HorizontalAlignment="Left" Margin="934,92,0,0" Name="PlayerSearch" VerticalAlignment="Top" Width="125" Click="PlayerSearch_Click" />
-        <Button Content="Backlight" Height="27" Margin="829,218,378,0" Name="button10" VerticalAlignment="Top" Grid.Column="1" Click="Backlight_Click" Grid.Row="1" />
-        <TextBox Height="27" HorizontalAlignment="Left" Margin="156,4,0,0" Name="textBox5" Text="0" VerticalAlignment="Top" Width="40" Grid.Column="1" />
-        <TextBox Height="27" HorizontalAlignment="Left" Margin="202,4,0,0" Name="textBox6" Text="0" VerticalAlignment="Top" Width="40" Grid.Column="1" />
-        <TextBox Height="27" HorizontalAlignment="Left" Margin="248,4,0,0" Name="textBox7" Text="0" VerticalAlignment="Top" Width="40" Grid.Column="1" />
-        <TextBox Height="27" HorizontalAlignment="Right" Margin="0,5,989,0" Name="textBox8" Text="0" VerticalAlignment="Top" Width="40" Grid.Column="1" />
-        <Button Content="Toggle Keep Alive" Height="27" HorizontalAlignment="Left" Margin="1073,218,0,0" Name="DisableKeepAlive" VerticalAlignment="Top" Width="115" Grid.Column="1" Grid.Row="1" Click="DisableKeepAlive_Click" />
-        <DataGrid AutoGenerateColumns="False" Grid.Column="1" Grid.Row="1" Height="171" HorizontalAlignment="Left" Margin="711,283,0,0" Name="ChatPadMappings" VerticalAlignment="Top" Width="595" />
-        <ComboBox Grid.Column="1" Height="26" HorizontalAlignment="Center" Margin="711,36,12,0" Name="comboBox1" VerticalAlignment="Top" Width="599" ItemsSource="{Binding}" HorizontalContentAlignment="Center">
-            <ComboBoxItem Content="Keyboard and Mouse" IsSelected="True" />
-            <ComboBoxItem Content="Joystick" />
+        Title="MainWindow" Height="613" Width="625" Background="White" AllowsTransparency="True" AllowDrop="True" WindowStyle="None" MouseLeftButtonDown="Window_MouseLeftButtonDown">
+        <Canvas Height="585" Width="616" Background="White">
+        <Rectangle Height="615" Width="633" Canvas.Left="-11" Canvas.Top="-26" Fill="#70000000" />
+        <Rectangle Canvas.Left="0" Canvas.Top="-26" Fill="White" Height="611" Width="616" />
+        <Rectangle Height="78" Width="613" Canvas.Left="-11" Canvas.Top="-26" Fill="Red" />
+        <Button Content="Disable Controller" Height="27" HorizontalAlignment="Left" Margin="950,218,0,0" Name="button3" VerticalAlignment="Top" Width="120" Grid.Column="1" Click="TurnOffController_Click" Grid.Row="1" Canvas.Left="-689" Canvas.Top="331" Foreground="White" Background="#FF9A9A9A" />
+        <TextBox Height="753" HorizontalAlignment="Left" Margin="1293,0,0,35" Name="textBoxLog" VerticalAlignment="Bottom" Width="728" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" AcceptsTab="True" AcceptsReturn="True" Grid.RowSpan="2" FontSize="10" UseLayoutRounding="True" MaxLines="100" Grid.Column="1" Visibility="Hidden" />
+        <Button Content="Clear" Height="29" HorizontalAlignment="Left" Margin="0,460,0,0" Name="button4" VerticalAlignment="Top" Width="556" Grid.ColumnSpan="2" Click="TextBoxLogClear_Click" Grid.Row="1" Canvas.Left="694" Canvas.Top="87" Visibility="Hidden" />
+        <TextBox Height="27" HorizontalAlignment="Left" Margin="663,-63,0,0" Name="textBox1" VerticalAlignment="Top" Width="40" Text="0" Grid.Column="1" Visibility="Hidden" />
+        <TextBox Height="27" HorizontalAlignment="Left" Margin="709,-63,0,0" Name="textBox2" VerticalAlignment="Top" Width="40" Text="0" Grid.Column="1" Visibility="Hidden" />
+        <TextBox Height="27" HorizontalAlignment="Left" Margin="755,-63,0,0" Name="textBox3" VerticalAlignment="Top" Width="40" Text="0" Grid.Column="1" Visibility="Hidden" />
+        <TextBox Height="27" HorizontalAlignment="Left" Margin="801,-63,0,0" Name="textBox4" VerticalAlignment="Top" Width="40" Text="0" Grid.Column="1" Visibility="Hidden" />
+        <Button Content="Send Binary" Height="27" HorizontalAlignment="Left" Margin="1031,-63,0,0" Name="button6" VerticalAlignment="Top" Width="230" Grid.Column="1" Click="SendTextBoxToDevice_Click" Visibility="Hidden" />
+        <Image Height="472" HorizontalAlignment="Left" Margin="708,68,0,0" Name="image1" Stretch="Fill" VerticalAlignment="Top" Width="603" Source="/Driver360WChatPad;component/Images/controllerwchatpad.jpg" Grid.Column="1" Grid.RowSpan="2" Canvas.Left="-696" Canvas.Top="3" />
+        <Button Content="Button" Height="22" HorizontalAlignment="Left" Margin="831,127,0,0" Name="button7" VerticalAlignment="Top" Width="33" Foreground="{x:Null}" ForceCursor="True" Background="{x:Null}" Grid.Column="1" Click="CapsLock_Click" Grid.Row="1" Canvas.Left="-695" Canvas.Top="336" />
+        <Button Background="{x:Null}" Content="Button" ForceCursor="True" Foreground="{x:Null}" Height="18" HorizontalAlignment="Left" Margin="843,154,0,0" Name="GreenSquare" VerticalAlignment="Top" Width="26" Click="GreenSquare_Click" Grid.Column="1" Grid.Row="1" Canvas.Left="-697" Canvas.Top="336" />
+        <Button Background="{x:Null}" Content="Button" ForceCursor="True" Foreground="{x:Null}" Height="18" HorizontalAlignment="Left" Margin="875,156,0,0" Name="People" VerticalAlignment="Top" Width="32" Click="People_Click" Grid.Column="1" Grid.Row="1" Canvas.Left="-696" Canvas.Top="336" />
+        <Button Background="{x:Null}" Content="Button" ForceCursor="True" Foreground="{x:Null}" Height="18" HorizontalAlignment="Left" Margin="1135,154,0,0" Name="OrangeCircle" VerticalAlignment="Top" Width="24" Click="OrangeCircle_Click" Grid.Column="1" Grid.Row="1" Canvas.Left="-696" Canvas.Top="336" />
+        <Button Content="Enable Backlight" Height="27" HorizontalAlignment="Left" Margin="708,218,0,0" Name="Backlight" VerticalAlignment="Top" Width="120" Grid.Column="1" Click="EnableBacklight_Click" Grid.Row="1" Canvas.Left="-689" Canvas.Top="331" Foreground="White" Background="#FF9A9A9A" />
+        <Button Content="Button" Height="39" HorizontalAlignment="Left" Margin="961,150,0,0" Name="Player1" VerticalAlignment="Top" Width="39" Foreground="{x:Null}" Background="{x:Null}" Click="Player1_Click" Grid.Column="1" Canvas.Left="-696" Canvas.Top="4" />
+        <Button Background="{x:Null}" Content="Button" Foreground="{x:Null}" Height="39" HorizontalAlignment="Left" Margin="998,150,0,0" Name="Player2" VerticalAlignment="Top" Width="39" Click="Player2_Click" Grid.Column="1" Canvas.Left="-696" Canvas.Top="4" />
+        <Button Background="{x:Null}" Content="Button" Foreground="{x:Null}" Height="39" HorizontalAlignment="Left" Margin="961,188,0,0" Name="player3" VerticalAlignment="Top" Width="39" Grid.Column="1" Click="Player3_Click" Canvas.Left="-696" Canvas.Top="4" />
+        <Button Background="{x:Null}" Content="Button" Foreground="{x:Null}" Height="39" HorizontalAlignment="Left" Margin="998,188,0,0" Name="Player4" VerticalAlignment="Top" Width="39" Grid.Column="1" Click="Player4_Click" Canvas.Left="-696" Canvas.Top="4" />
+        <Button Content="Backlight" Height="27" Margin="829,218,378,0" Name="button10" VerticalAlignment="Top" Grid.Column="1" Click="Backlight_Click" Grid.Row="1" Canvas.Left="-689" Canvas.Top="331" Width="120" Foreground="White" Background="#FF9A9A9A" />
+        <TextBox Height="27" HorizontalAlignment="Left" Margin="847,-63,0,0" Name="textBox5" Text="0" VerticalAlignment="Top" Width="40" Grid.Column="1" Visibility="Hidden" />
+        <TextBox Height="27" HorizontalAlignment="Left" Margin="893,-63,0,0" Name="textBox6" Text="0" VerticalAlignment="Top" Width="40" Grid.Column="1" Visibility="Hidden" />
+        <TextBox Height="27" HorizontalAlignment="Left" Margin="939,-63,0,0" Name="textBox7" Text="0" VerticalAlignment="Top" Width="40" Grid.Column="1" Visibility="Hidden" />
+        <TextBox Height="27" HorizontalAlignment="Right" Margin="0,-62,299,0" Name="textBox8" Text="0" VerticalAlignment="Top" Width="40" Grid.Column="1" Visibility="Hidden" />
+        <Button Content="Toggle Keep Alive" Height="27" HorizontalAlignment="Left" Margin="1073,218,0,0" Name="DisableKeepAlive" VerticalAlignment="Top" Width="120" Grid.Column="1" Grid.Row="1" Click="DisableKeepAlive_Click" Canvas.Left="-689" Canvas.Top="331" Foreground="White" Background="#FF9A9A9A" />
+        <ComboBox Grid.Column="1" Height="26" HorizontalAlignment="Center" Margin="711,36,12,0" Name="comboBox1" VerticalAlignment="Top" Width="559" ItemsSource="{Binding}" HorizontalContentAlignment="Center" Canvas.Left="-696" Canvas.Top="3" Background="#FF969696" Foreground="White">
+            <ComboBoxItem Content="Keyboard and Mouse" IsSelected="False" Background="Gray" />
+            <ComboBoxItem Content="Joystick" IsSelected="True" Background="Black" />
         </ComboBox>
-        <Label Content="Emulate Joystick As" Grid.Column="1" Height="26" HorizontalAlignment="Left" Margin="708,12,0,0" Name="label1" VerticalAlignment="Top" Width="602" HorizontalContentAlignment="Center" />
-        <TextBox Grid.Column="1" Height="40" HorizontalAlignment="Left" Margin="1127,207,0,0" Name="joystickAButton" VerticalAlignment="Top" Width="41" Background="#87FFFFFF" FontSize="24" FontWeight="Bold" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Text="A" />
-        <TextBox Background="#87FFFFFF" Height="40" HorizontalAlignment="Left" Margin="1087,166,0,0" Name="joystickXButton" VerticalAlignment="Top" Width="41" Grid.Column="1" FontSize="24" FontWeight="Bold" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Text="X" />
-        <TextBox Background="#87FFFFFF" Height="40" HorizontalAlignment="Left" Margin="1127,126,0,0" Name="joystickYButton" VerticalAlignment="Top" Width="41" Grid.Column="1" FontSize="24" FontWeight="Bold" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Text="Y" />
-        <TextBox Background="#87FFFFFF" Height="40" HorizontalAlignment="Left" Margin="1167,166,0,0" Name="joystickBButton" VerticalAlignment="Top" Width="41" Grid.Column="1" FontSize="24" FontWeight="Bold" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Text="B" />
-    </Grid>
+        <Image Canvas.Left="525" Canvas.Top="497" Height="79" Name="image2" Stretch="Fill" Width="77" Source="/Driver360WChatPad;component/Images/thePORlogo.png" MouseDown="image2_MouseDown" />
+        <Image Canvas.Left="551" Canvas.Top="0" Height="20" Name="image3" Stretch="Uniform" Width="23" Source="/Driver360WChatPad;component/Images/60-x@2x.png" VerticalAlignment="Bottom" MouseDown="image3_MouseDown" />
+        <Image Canvas.Left="522" Canvas.Top="0" Height="20" Name="image4" Source="/Driver360WChatPad;component/Images/272-windows@2x.png" Stretch="Uniform" Width="23" VerticalAlignment="Bottom" MouseDown="image4_MouseDown" />
+        <Image Canvas.Left="493" Canvas.Top="0" Height="20" Name="image5" Source="/Driver360WChatPad;component/Images/45-minus@2x.png" Stretch="Uniform" Width="23" VerticalAlignment="Bottom" MouseDown="image5_MouseDown" />
+    </Canvas>
 </Window>

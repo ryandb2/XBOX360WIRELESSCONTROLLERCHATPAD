@@ -105,13 +105,15 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\ChatPad_Controller_Straight_Up_00002.jpg" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="ChatPadMappings.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </Content>
+    <Resource Include="Images\272-windows%402x.png" />
+    <Resource Include="Images\45-minus%402x.png" />
+    <Resource Include="Images\60-x%402x.png" />
+    <Resource Include="Images\thePORlogo.png" />
+    <Resource Include="Images\controllerwchatpad.jpg" />
     <Content Include="JoystickMappings.xml">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
