@@ -18,6 +18,7 @@ using System.Threading;
 using System.Data;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Diagnostics;
+using Microsoft.Win32;
 namespace Driver360WChatPad
 {
     public partial class MainWindow : Window
@@ -44,6 +45,7 @@ namespace Driver360WChatPad
         public MainWindow()
         {
             InitializeComponent();
+            ValidateRegistrySettings();
             jController = new JoystickController();
             cController = new ChatpadController();
             MyUsbFinder = new UsbDeviceFinder(1118, 1817);
@@ -208,7 +210,8 @@ namespace Driver360WChatPad
         {
             if (text.Length!=0)
             {
-                textBoxLog.Text = text + System.Environment.NewLine + textBoxLog.Text;
+                textBlock1.Text = text + System.Environment.NewLine + textBlock1.Text;
+                //textBoxLog.Text = text + System.Environment.NewLine + textBoxLog.Text;
             }
         }        
         public void SendDataToDevice(byte[] dataToSend,string requestDescription)
@@ -328,6 +331,16 @@ namespace Driver360WChatPad
                 SendDataToDevice(InputValidation.GreenSquareOff(), "Deluminate Green Square");
             }
         }
+        private void ValidateRegistrySettings()
+        {
+            RegistryKey reg = Registry.LocalMachine;
+            RegistryKey rk = reg.OpenSubKey(@"SYSTEM\CurrentControlSet\services\vjoy\Parameters\Device01", true);
+            string s = BitConverter.ToString((byte[])rk.GetValue("HidReportDesctiptor")); //Yes it is spelled wrong
+            if (s != "05-01-15-00-09-04-A1-01-05-01-85-01-09-01-15-00-26-FF-7F-75-20-95-01-A1-00-09-30-81-02-09-31-81-02-09-32-81-02-09-33-81-02-09-34-81-02-09-35-81-02-81-01-81-01-C0-75-20-95-04-81-01-05-09-15-00-25-01-55-00-65-00-19-01-29-20-75-01-95-20-81-02-C0")
+            {
+                //rk.SetValue("HidReportDesctiptor", "05-01-15-00-09-04-A1-01-05-01-85-01-09-01-15-00-26-FF-7F-75-20-95-01-A1-00-09-30-81-02-09-31-81-02-09-32-81-02-09-33-81-02-09-34-81-02-09-35-81-02-81-01-81-01-C0-75-20-95-04-81-01-05-09-15-00-25-01-55-00-65-00-19-01-29-20-75-01-95-20-81-02-C0",RegistryValueKind.Binary);
+            }
+        }
         private void GreenSquare_Click(object sender, RoutedEventArgs e)
         {
             GreenModifier();
@@ -366,7 +379,6 @@ namespace Driver360WChatPad
             OutputValidation.orangeModifier = !OutputValidation.orangeModifier;
         }
         private void TurnOffController_Click(object sender, RoutedEventArgs e){SendDataToDevice(InputValidation.TurnOffController(), "Controller Off");}
-        private void TextBoxLogClear_Click(object sender, RoutedEventArgs e){textBoxLog.Clear();}
         private void DisableKeepAlive_Click(object sender, RoutedEventArgs e){enableKeepAlive = !enableKeepAlive;}
 
         private void image3_MouseDown(object sender, MouseButtonEventArgs e)

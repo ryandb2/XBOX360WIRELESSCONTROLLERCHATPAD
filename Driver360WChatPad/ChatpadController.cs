@@ -31,7 +31,7 @@ namespace Driver360WChatPad
             }
             catch (IndexOutOfRangeException iorex)
             {
-                //Value from chat pad not recognized
+                //Value from chat pad not recognized, should not be possible, yeah right
                 throw new Exception("Chatpad Data Not Recognized", iorex);
             }
         }

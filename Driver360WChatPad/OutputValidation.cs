@@ -48,29 +48,13 @@ namespace Driver360WChatPad
         {
             if (response[1] == 2 && response[3] == 240)
             {
-                if (response[26] != 0)
+                if (response[24] != 240) //Keep Alive for Chat pad with counting hex, no value in keeping
                 {
-                    string key = cController.GetChatPadKeyValue(response[26].ToString(), orangeModifier, greenModifier);
-                    if (key.Length != 0)
+                    if (response[26] != 0)
                     {
-                        if (!SpecialKeyAssignment(key))
-                        {
-                            if (!capsLockModifier && !shiftModifier)
-                            {
-                                SendKeys.SendWait(key);
-                            }
-                            else
-                            {
-                                SendKeys.SendWait(key.ToUpper());
-                            }
-                        }
-                    }
-
-                    if (response[26] != response[27] && response[27]!=0)
-                    {
+                        string key = cController.GetChatPadKeyValue(response[26].ToString(), orangeModifier, greenModifier);
                         if (key.Length != 0)
                         {
-                            key = cController.GetChatPadKeyValue(response[27].ToString(), orangeModifier, greenModifier);
                             if (!SpecialKeyAssignment(key))
                             {
                                 if (!capsLockModifier && !shiftModifier)
@@ -80,6 +64,25 @@ namespace Driver360WChatPad
                                 else
                                 {
                                     SendKeys.SendWait(key.ToUpper());
+                                }
+                            }
+                        }
+
+                        if (response[26] != response[27] && response[27] != 0)
+                        {
+                            if (key.Length != 0)
+                            {
+                                key = cController.GetChatPadKeyValue(response[27].ToString(), orangeModifier, greenModifier);
+                                if (!SpecialKeyAssignment(key))
+                                {
+                                    if (!capsLockModifier && !shiftModifier)
+                                    {
+                                        SendKeys.SendWait(key);
+                                    }
+                                    else
+                                    {
+                                        SendKeys.SendWait(key.ToUpper());
+                                    }
                                 }
                             }
                         }

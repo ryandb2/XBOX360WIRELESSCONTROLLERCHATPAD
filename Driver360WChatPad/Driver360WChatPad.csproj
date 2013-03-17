@@ -114,6 +114,9 @@
     <Resource Include="Images\60-x%402x.png" />
     <Resource Include="Images\thePORlogo.png" />
     <Resource Include="Images\controllerwchatpad.jpg" />
+    <Resource Include="Images\180-stickynote%402x.png" />
+    <Resource Include="Images\179-notepad%402x.png" />
+    <Resource Include="Images\controller.ico" />
     <Content Include="JoystickMappings.xml">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
