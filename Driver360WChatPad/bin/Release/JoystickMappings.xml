@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<DocumentElement>
+  <JoystickButton>
+    <ID>LB</ID>
+    <Map>13</Map>
+    <Description>Left Bumper</Description>
+  </JoystickButton>
+  <JoystickButton>
+    <ID>RB</ID>
+    <Map>14</Map>
+    <Description>Right Bumper</Description>
+  </JoystickButton>
+  <JoystickButton>
+    <ID>GUIDE</ID>
+    <Map>15</Map>
+    <Description>Guide</Description>
+  </JoystickButton>
+  <JoystickButton>
+    <ID>A</ID>
+    <Map>16</Map>
+    <Description>A</Description>
+  </JoystickButton>
+  <JoystickButton>
+    <ID>B</ID>
+    <Map>17</Map>
+    <Description>B</Description>
+  </JoystickButton>
+  <JoystickButton>
+    <ID>X</ID>
+    <Map>18</Map>
+    <Description>X</Description>
+  </JoystickButton>
+  <JoystickButton>
+    <ID>Y</ID>
+    <Map>19</Map>
+    <Description>Y</Description>
+  </JoystickButton>
+</DocumentElement>
