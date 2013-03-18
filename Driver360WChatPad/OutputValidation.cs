@@ -99,19 +99,19 @@ namespace Driver360WChatPad
                 {
                     jController.AxisSet(controllerIndex, 0, 8);
                 }
-                else if (response[9] == 0)
+                if (response[9] == 0)
                 {
                     jController.AxisSet(controllerIndex, 0, 9);
                 }
-                else if (response[10] == 0 && response[12] == 0)
+                if (response[11] < 20 && response[13] < 20)
                 {
-                    //jController.AxisSet(controllerIndex, 0, 10);
-                    //jController.AxisSet(controllerIndex, 255, 12);
+                    jController.AxisSet(controllerIndex, 0, 11);
+                    jController.AxisSet(controllerIndex, 255, 13);
                 }
-                else if (response[14] == 0 && response[16] == 0)
+                if (response[15] < 20 && response[17] < 20)
                 {
-                    //jController.AxisSet(controllerIndex, 0, 14);
-                    //jController.AxisSet(controllerIndex, 255, 16);
+                    jController.AxisSet(controllerIndex, 0, 15);
+                    jController.AxisSet(controllerIndex, 255, 17);
                 }
                 //0 1 0 240 0 19 0 XX 0 0 32 12 92 0 44 6 163 247
                 //a=16, b=32, x=64, y=128
@@ -125,7 +125,19 @@ namespace Driver360WChatPad
                         jController.ButtonToggle(controllerIndex, jController.GetJoystickKeyValue(s, 1), true);
                     }
                 }
-                else if (response[6] > 0)
+                else // || response[4] == 0)
+                {
+                    var b = (Bits)255;
+                    string[] sArray = b.ToString().Replace(" ", string.Empty).Split(',');
+                    foreach (string s in sArray)
+                    {
+                        if (s != "NA")
+                        {
+                            jController.ButtonToggle(controllerIndex, jController.GetJoystickKeyValue(s, 1), false);
+                        }
+                    }
+                }
+                if (response[6] > 0)
                 {
                     var b = (Bits2)response[6];
 
@@ -146,7 +158,20 @@ namespace Driver360WChatPad
                         jController.ButtonToggle(controllerIndex, jController.GetJoystickKeyValue(s, 2), true);
                     }
                 }
-                else if (response[8] > 0)
+                else
+                {
+                    var b2 = (Bits2)255;
+                    string[] sArray = b2.ToString().Replace(" ", string.Empty).Split(',');
+                    foreach (string s in sArray)
+                    {
+                        if (s != "NA")
+                        {
+                            jController.ButtonToggle(controllerIndex, jController.GetJoystickKeyValue(s, 2), false);
+                        }
+                    }
+                    previousDPad.Clear();
+                }
+                if (response[8] > 0)
                 {
                     //Left Trigger
                     int v = response[8];
@@ -156,7 +181,7 @@ namespace Driver360WChatPad
                     }
                     jController.AxisSet(controllerIndex, -response[8]/2, 8);
                 }
-                else if (response[9] > 0)
+                if (response[9] > 0)
                 {
                     int v = response[9];
                     if (v > 0)
@@ -165,7 +190,7 @@ namespace Driver360WChatPad
                     }
                     jController.AxisSet(controllerIndex, response[9]/2, 9);
                 }
-                else if (response[11] > 0 || response[13] > 0)
+                if (response[11] > 0 || response[13] > 0)
                 {
                     int x = response[11];
                     if (x >= 128) //What why? Why does MS provide 4 points to position in 2d space? Why do the values jump at a certain point? Why... Why...
@@ -180,7 +205,7 @@ namespace Driver360WChatPad
                     }
                     jController.AxisSet(controllerIndex, -y, 13);
                 }
-                else if (response[15] > 0 || response[17] > 0)
+                if (response[15] > 0 || response[17] > 0)
                 {
                     int x = response[15];
                     if (x >= 128) //What why? Why does MS provide 4 points to position in 2d space? Why do the values jump at a certain point? Why... Why...
@@ -194,28 +219,6 @@ namespace Driver360WChatPad
                         y = y - 255; //Why is the y stick inverted?
                     }
                     jController.AxisSet(controllerIndex, -y, 17);
-                }
-                else if (response[7] == 0 || response[4] == 0)
-                {
-                    var b = (Bits)255;
-                    string[] sArray = b.ToString().Replace(" ", string.Empty).Split(',');
-                    foreach (string s in sArray)
-                    {
-                        if (s != "NA")
-                        {
-                            jController.ButtonToggle(controllerIndex, jController.GetJoystickKeyValue(s, 1), false);
-                        }
-                    }
-                    var b2 = (Bits2)255;
-                    sArray = b2.ToString().Replace(" ", string.Empty).Split(',');
-                    foreach (string s in sArray)
-                    {
-                        if (s != "NA")
-                        {
-                            jController.ButtonToggle(controllerIndex, jController.GetJoystickKeyValue(s, 2), false);
-                        }
-                    }
-                    previousDPad.Clear();
                 }
             }
         }
