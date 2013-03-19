@@ -19,6 +19,8 @@ using System.Data;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Diagnostics;
 using Microsoft.Win32;
+using System.Windows.Forms;
+using System.Drawing;
 namespace Driver360WChatPad
 {
     public partial class MainWindow : Window
@@ -37,8 +39,10 @@ namespace Driver360WChatPad
         public static ChatpadController cController;
         //private static byte[] previousResponse; //Do I still need to store previous response to prevent multiples? Seems like the delay has fixed my issues, but might not be robust
         private static bool chatPadEventsFlowing = false;
+        private static bool controllerEventsFlowing = false;
         private static JoystickController jController;
         private static uint controllerIndex = 1;
+        NotifyIcon ni = new NotifyIcon();
         //private static List<UsbEndpointWriter> writers; //TODO: Implement multiple controller writers
         //private static List<UsbEndpointReader> readers; //TODO: Implement multiple controller writers
 
@@ -64,20 +68,49 @@ namespace Driver360WChatPad
                 reader.DataReceived += new EventHandler<EndpointDataEventArgs>(reader_DataReceived);
                 reader.DataReceivedEnabled = true;
                 timer.Start();
-                Initialize();
+                InitializeChatpad();
+                InitializeController();
             }
             else
             {
                 throw new Exception("Whole USB Device is not implemented");
-            }   
+            }
+            ni.Icon = new Icon(@"Images\controller.ico");
+            ni.Visible = true;
+            ni.Click +=
+                delegate(object sender, EventArgs args)
+                {
+                    this.Show();
+                    this.WindowState = WindowState.Normal;
+                };
         }
-        private void Initialize()
+        protected override void OnStateChanged(EventArgs e)
+        {
+            if (WindowState == WindowState.Minimized)
+            {
+                this.Hide();
+                ni.Visible = true;
+            }
+            else
+            {
+                ni.Visible = false;
+            }
+            
+
+            base.OnStateChanged(e);
+        }
+        private void InitializeChatpad()
         {
             SendDataToDevice(InputValidation.PeopleOff(),"");
             SendDataToDevice(InputValidation.OrangeCircleOff(), "");
             SendDataToDevice(InputValidation.GreenSquareOff(), "");
             SendDataToDevice(InputValidation.CapsLockOff(), "");
             InitializeBeginChatPadEvents();
+        }
+        private void InitializeController()
+        {
+            SendDataToDevice(InputValidation.Player(1), "");
+            controllerEventsFlowing = true;
         }
         private void InitializeBeginChatPadEvents()
         {
@@ -88,6 +121,7 @@ namespace Driver360WChatPad
             SendDataToDevice(InputValidation.InitializationFive(), "");
             SendDataToDevice(InputValidation.InitializationSix(), "");
             SendDataToDevice(InputValidation.InitializationSeven(), "");
+            SetSpecialKeys();
             enableKeepAlive = true;
             chatPadEventsFlowing = true;
         }
@@ -115,6 +149,14 @@ namespace Driver360WChatPad
             {
                 chatPadEventsFlowing = false;
             }
+            if (!controllerEventsFlowing)
+            {
+                InitializeController();
+            }
+            else
+            {
+                controllerEventsFlowing = false;
+            }
         }
         void reader_DataReceived(object sender, EndpointDataEventArgs e)
         {
@@ -135,12 +177,12 @@ namespace Driver360WChatPad
             else if (e.Buffer[1] == 0 && e.Buffer[3] == 240 && e.Buffer[24] == 240 && e.Buffer[25] == 3 && (e.Buffer[26] <= 15 || e.Buffer[26] == 128))
             {
                 //Do nothing, these are normal keep alive responses, I think :)
-                chatPadEventsFlowing = true;
+                //chatPadEventsFlowing = true;
             }
             else if (e.Buffer[1] == 0 && e.Buffer[3] == 240 && e.Buffer[24] == 0 && e.Buffer[25] == 0 && (e.Buffer[26] <= 15 || e.Buffer[26] == 128))
             {
                 //Do nothing, these are normal keep alive responses, I think :)
-                chatPadEventsFlowing = true;
+                //chatPadEventsFlowing = true;
             }
             else if (e.Buffer[1] == 2 && e.Buffer[3] == 240 && e.Buffer[24] == 0 && e.Buffer[25] == 3 && (e.Buffer[26] <= 15 || e.Buffer[26] == 128))
             {
@@ -150,37 +192,29 @@ namespace Driver360WChatPad
             else if (e.Buffer[1] == 0 && e.Buffer[3] == 240 && e.Buffer[24] == 0 && e.Buffer[25] == 4 && (e.Buffer[26] <= 15 || e.Buffer[26] == 128))
             {
                 //Do nothing, these are normal keep alive responses, I think :)
-                chatPadEventsFlowing = true;
+                //chatPadEventsFlowing = true;
             }
             else if (e.Buffer[1] == 2 && e.Buffer[3] == 240 && e.Buffer[24] == 240 && e.Buffer[25] == 3 && (e.Buffer[26] <= 15 || e.Buffer[26] == 128))
             {
                 //Do nothing, these are normal keep alive responses, I think :)
                 //Wish I knew what I was doing instead of guessing
-                chatPadEventsFlowing = true;
+                chatPadEventsFlowing = false;
+                //Call these false? something is wrong here
             }
             else
             {
                 if (e.Buffer[1] == 1) //Joystick Data
                 {
-                    /*ThreadStart startMapping = delegate()
-                    {
-                        Dispatcher.Invoke(DispatcherPriority.Normal, new Action<byte[], JoystickController, uint>(OutputValidation.OutputMappingForJoyStick), e.Buffer, jController, controllerIndex);
-                    };
-                    new Thread(startMapping).Start();*/
                     OutputValidation.OutputMappingForJoyStick(e.Buffer, jController, controllerIndex);
+                    controllerEventsFlowing = true;
                 }
                 else if (e.Buffer[1] == 2)
                 {
                     if (lastProcessedResponse.AddMilliseconds(120) <= DateTime.Now)// || previousResponse == null)//Make this magic number a config, lower = better response, but more likely to get repeating values
                     {
-                        /*ThreadStart startMapping = delegate()
-                        {
-                            Dispatcher.Invoke(DispatcherPriority.Normal, new Action<byte[], ChatpadController, uint>(OutputValidation.OutputMappingForChatPad), e.Buffer, cController, controllerIndex);
-                        };
-                        new Thread(startMapping).Start();*/
-                        OutputValidation.OutputMappingForChatPad(e.Buffer, cController, controllerIndex);
-                        SetSpecialKeys();
+                        OutputValidation.OutputMappingForChatPad(e.Buffer, cController, controllerIndex,this);
                         lastProcessedResponse = DateTime.Now;
+                        chatPadEventsFlowing = true;
                     }                    
                 }
                 updateLog.Append("Response - ");
@@ -194,17 +228,18 @@ namespace Driver360WChatPad
                     Dispatcher.Invoke(DispatcherPriority.Normal, new Action<string>(SetLog), updateLog.ToString());
                 };
                 new Thread(startLog).Start();
-
-                chatPadEventsFlowing = true;
-                //previousResponse = e.Buffer;
             }
         }
         public void SetSpecialKeys()
         {
-            OrangeModifier();
-            GreenModifier();
-            CapsLockModifier();
-            PeopleModifier();
+            SendDataToDevice(InputValidation.OrangeCircleOff(), "");
+            OutputValidation.orangeModifier = false;
+            SendDataToDevice(InputValidation.GreenSquareOff(), "");
+            OutputValidation.greenModifier = false;
+            SendDataToDevice(InputValidation.CapsLockOff(), "");
+            OutputValidation.capsLockModifier = false;
+            SendDataToDevice(InputValidation.PeopleOff(), "");
+            OutputValidation.peopleModifier = false;            
         }
         public void SetLog(string text)
         {
@@ -306,7 +341,7 @@ namespace Driver360WChatPad
         public void EnableBacklight_Click(object sender, RoutedEventArgs e){SendDataToDevice(InputValidation.EnableBacklight(), "Illuminate Backlight on Key Press");}
         public void CapsLockModifier()
         {
-            if (!OutputValidation.capsLockModifier)
+            if (OutputValidation.capsLockModifier)
             {
                 SendDataToDevice(InputValidation.CapsLockOn(), "Illuminate Caps Lock");
             }
@@ -318,11 +353,10 @@ namespace Driver360WChatPad
         private void CapsLock_Click(object sender, RoutedEventArgs e)
         {
             CapsLockModifier();
-            OutputValidation.capsLockModifier = !OutputValidation.capsLockModifier;
         }
         public void GreenModifier()
         {
-            if (!OutputValidation.greenModifier)
+            if (OutputValidation.greenModifier)
             {
                 SendDataToDevice(InputValidation.GreenSquareOn(), "Illuminate Green Square");
             }
@@ -343,12 +377,11 @@ namespace Driver360WChatPad
         }
         private void GreenSquare_Click(object sender, RoutedEventArgs e)
         {
-            GreenModifier();
-            OutputValidation.greenModifier = !OutputValidation.greenModifier;
+            GreenModifier();            
         }
         public void PeopleModifier()
         {
-            if (!OutputValidation.peopleModifier)
+            if (OutputValidation.peopleModifier)
             {
                 SendDataToDevice(InputValidation.PeopleOn(), "Illuminate People");
             }
@@ -360,11 +393,10 @@ namespace Driver360WChatPad
         private void People_Click(object sender, RoutedEventArgs e)
         {
             PeopleModifier();
-            OutputValidation.peopleModifier = !OutputValidation.peopleModifier;
         }
         public void OrangeModifier()
         {
-            if (!OutputValidation.orangeModifier)
+            if (OutputValidation.orangeModifier)
             {
                 SendDataToDevice(InputValidation.OrangeCircleOn(), "Illuminate Orange Circle");
             }
@@ -376,7 +408,6 @@ namespace Driver360WChatPad
         private void OrangeCircle_Click(object sender, RoutedEventArgs e)
         {
             OrangeModifier();
-            OutputValidation.orangeModifier = !OutputValidation.orangeModifier;
         }
         private void TurnOffController_Click(object sender, RoutedEventArgs e){SendDataToDevice(InputValidation.TurnOffController(), "Controller Off");}
         private void DisableKeepAlive_Click(object sender, RoutedEventArgs e){enableKeepAlive = !enableKeepAlive;}
@@ -411,7 +442,12 @@ namespace Driver360WChatPad
         private void image2_MouseDown(object sender, MouseButtonEventArgs e)
         {
             //Go to 
-            Process.Start("http://www.thepocketofresistance.com/");
+            Process.Start("https://github.com/ryandb2/");
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            ni.Visible = false;
         }
     }
 

@@ -9,6 +9,7 @@
 //------------------------------------------------------------------------------
 
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("chatpadmappings.xml")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("images/controller.ico")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("joystickmappings.xml")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("inputsimulator.dll")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("vjoyinterface.dll")]

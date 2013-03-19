@@ -18,7 +18,7 @@ namespace Driver360WChatPad
         public static bool orangeModifier = false;
         public static bool capsLockModifier = false;
         public static bool greenModifier = false;
-        public static bool peopleModifier = false; //Not currently used other than for on/off toggle
+        public static bool peopleModifier = false;
         public static Queue<string> previousDPad = new Queue<string>();
         [Flags]
         enum Bits
@@ -44,12 +44,50 @@ namespace Driver360WChatPad
             LT = 64,
             RT = 128
         }
-        public static void OutputMappingForChatPad(byte[] response,ChatpadController cController, uint controllerIndex)
+        public static void OutputMappingForChatPad(byte[] response,ChatpadController cController, uint controllerIndex,MainWindow mw)
         {
             if (response[1] == 2 && response[3] == 240)
             {
                 if (response[24] != 240) //Keep Alive for Chat pad with counting hex, no value in keeping
                 {
+                    if (response[25] != 0)
+                    {
+                        switch (response[25])
+                        {
+                            case 1:
+                                {
+                                    if (!orangeModifier)
+                                    {
+                                        shiftModifier = true;
+                                    }
+                                    else
+                                    {
+                                        capsLockModifier = !capsLockModifier;
+                                        mw.CapsLockModifier();
+                                    }
+                                    break;
+                                }
+                            case 2:
+                                {
+                                    greenModifier = !greenModifier;
+                                    mw.GreenModifier();
+                                    break;
+                                }
+                            case 4:
+                                {
+                                    orangeModifier = !orangeModifier;
+                                    mw.OrangeModifier();
+                                    break;
+                                }
+                            case 8:
+                                {
+                                    peopleModifier = !peopleModifier;
+                                    mw.PeopleModifier();
+                                    break;
+                                }
+                        }
+                    }
+
                     if (response[26] != 0)
                     {
                         string key = cController.GetChatPadKeyValue(response[26].ToString(), orangeModifier, greenModifier);

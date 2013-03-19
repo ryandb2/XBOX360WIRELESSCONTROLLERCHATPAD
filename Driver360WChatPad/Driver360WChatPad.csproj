@@ -41,6 +41,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -116,7 +117,9 @@
     <Resource Include="Images\controllerwchatpad.jpg" />
     <Resource Include="Images\180-stickynote%402x.png" />
     <Resource Include="Images\179-notepad%402x.png" />
-    <Resource Include="Images\controller.ico" />
+    <Content Include="Images\controller.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="JoystickMappings.xml">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
