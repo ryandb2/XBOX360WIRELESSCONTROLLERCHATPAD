@@ -129,7 +129,7 @@ namespace Driver360WChatPad
             }
             shiftModifier = false;
         }
-        public static void OutputMappingForJoyStick(byte[] response, JoystickController jController, uint controllerIndex)
+        public static void OutputMappingForJoyStick(byte[] response, JoystickController jController, uint controllerIndex,uint deadzone)
         {
             if (response[1] == 1 && response[3] == 240 && response[5] == 19)
             {
@@ -141,15 +141,15 @@ namespace Driver360WChatPad
                 {
                     jController.AxisSet(controllerIndex, 0, 9);
                 }
-                if (response[11] < 20 && response[13] < 20)
+                if (response[11] < deadzone && response[13] < deadzone)
                 {
                     jController.AxisSet(controllerIndex, 0, 11);
-                    jController.AxisSet(controllerIndex, 255, 13);
+                    jController.AxisSet(controllerIndex, 0, 13);
                 }
-                if (response[15] < 20 && response[17] < 20)
+                if (response[15] < deadzone && response[17] < deadzone)
                 {
                     jController.AxisSet(controllerIndex, 0, 15);
-                    jController.AxisSet(controllerIndex, 255, 17);
+                    jController.AxisSet(controllerIndex, 0, 17);
                 }
                 //0 1 0 240 0 19 0 XX 0 0 32 12 92 0 44 6 163 247
                 //a=16, b=32, x=64, y=128
@@ -228,7 +228,7 @@ namespace Driver360WChatPad
                     }
                     jController.AxisSet(controllerIndex, response[9]/2, 9);
                 }
-                if (response[11] > 0 || response[13] > 0)
+                if (response[11] > deadzone || response[13] > deadzone)
                 {
                     int x = response[11];
                     if (x >= 128) //What why? Why does MS provide 4 points to position in 2d space? Why do the values jump at a certain point? Why... Why...
@@ -243,14 +243,14 @@ namespace Driver360WChatPad
                     }
                     jController.AxisSet(controllerIndex, -y, 13);
                 }
-                if (response[15] > 0 || response[17] > 0)
+                if (response[15] > deadzone || response[17] > deadzone)
                 {
                     int x = response[15];
                     if (x >= 128) //What why? Why does MS provide 4 points to position in 2d space? Why do the values jump at a certain point? Why... Why...
                     {
                         x = x - 255;
                     }
-                    jController.AxisSet(controllerIndex, x, 15);
+                    jController.AxisSet(controllerIndex, -x, 15);
                     int y = response[17];
                     if (y >= 128) //What why? Why does MS provide 4 points to position in 2d space? Why do the values jump at a certain point? Why... Why...
                     {

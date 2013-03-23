@@ -16,9 +16,8 @@ namespace Driver360WChatPad
         {
             dt.Columns.Add(new DataColumn("ID", typeof(int)));
             dt.Columns.Add(new DataColumn("Map", typeof(string)));
-            dt.Columns.Add(new DataColumn("OrangeModifer", typeof(string)));
-            dt.Columns.Add(new DataColumn("GreenModifer", typeof(string)));
-            dt.Columns.Add(new DataColumn("ShiftModifer", typeof(string)));
+            dt.Columns.Add(new DataColumn("OrangeModifier", typeof(string)));
+            dt.Columns.Add(new DataColumn("GreenModifier", typeof(string)));
             dt.ReadXml("ChatPadMappings.xml");
             dv = new DataView(dt);
         }
@@ -27,7 +26,18 @@ namespace Driver360WChatPad
             try
             {
                 dv.RowFilter = String.Format("(ID={0})", Convert.ToInt16(value));
-                return dv[0]["Map"].ToString();
+                if (orangeModifer)
+                {
+                    return dv[0]["OrangeModifier"].ToString();
+                }
+                else if (greenModifer)
+                {
+                    return dv[0]["GreenModifier"].ToString();
+                }
+                else
+                {
+                    return dv[0]["Map"].ToString();
+                }
             }
             catch (IndexOutOfRangeException iorex)
             {

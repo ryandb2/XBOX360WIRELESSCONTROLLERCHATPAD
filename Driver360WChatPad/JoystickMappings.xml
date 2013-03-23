@@ -20,25 +20,25 @@
   </JoystickButton>
   <JoystickButton>
     <ID>A</ID>
-    <Map>16</Map>
+    <Map>1</Map>
     <ButtonGroup>1</ButtonGroup>
     <Description>A</Description>
   </JoystickButton>
   <JoystickButton>
     <ID>B</ID>
-    <Map>17</Map>
+    <Map>2</Map>
     <ButtonGroup>1</ButtonGroup>
     <Description>B</Description>
   </JoystickButton>
   <JoystickButton>
     <ID>X</ID>
-    <Map>18</Map>
+    <Map>3</Map>
     <ButtonGroup>1</ButtonGroup>
     <Description>X</Description>
   </JoystickButton>
   <JoystickButton>
     <ID>Y</ID>
-    <Map>19</Map>
+    <Map>4</Map>
     <ButtonGroup>1</ButtonGroup>
     <Description>Y</Description>
   </JoystickButton>

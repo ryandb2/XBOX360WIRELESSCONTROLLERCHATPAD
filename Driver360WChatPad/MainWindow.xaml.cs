@@ -42,6 +42,7 @@ namespace Driver360WChatPad
         private static bool controllerEventsFlowing = false;
         private static JoystickController jController;
         private static uint controllerIndex = 1;
+        private static uint deadZone = 40;
         NotifyIcon ni = new NotifyIcon();
         //private static List<UsbEndpointWriter> writers; //TODO: Implement multiple controller writers
         //private static List<UsbEndpointReader> readers; //TODO: Implement multiple controller writers
@@ -205,7 +206,7 @@ namespace Driver360WChatPad
             {
                 if (e.Buffer[1] == 1) //Joystick Data
                 {
-                    OutputValidation.OutputMappingForJoyStick(e.Buffer, jController, controllerIndex);
+                    OutputValidation.OutputMappingForJoyStick(e.Buffer, jController, controllerIndex,deadZone);
                     controllerEventsFlowing = true;
                 }
                 else if (e.Buffer[1] == 2)
@@ -448,6 +449,39 @@ namespace Driver360WChatPad
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             ni.Visible = false;
+        }
+
+        private void sliderDeadZone_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            showDeadzone();
+        }
+        private void leftDeadzone_Initialized(object sender, EventArgs e)
+        {
+            showDeadzone();
+        }
+        private void showDeadzone()
+        {
+            deadZone = (uint)sliderDeadZone.Value;
+            try
+            {
+                leftDeadzone.Width = 108 * (sliderDeadZone.Value / 255);
+                leftDeadzone.Height = 108 * (sliderDeadZone.Value / 255);
+                Canvas.SetTop(leftDeadzone, 135 + (108 / 2) - leftDeadzone.Height / 2);
+                Canvas.SetLeft(leftDeadzone, 98 + (108 / 2) - leftDeadzone.Width / 2);
+
+                rightDeadzone.Width = 108 * (sliderDeadZone.Value / 255);
+                rightDeadzone.Height = 108 * (sliderDeadZone.Value / 255);
+                Canvas.SetTop(rightDeadzone, 226 + (108 / 2) - rightDeadzone.Height / 2);
+                Canvas.SetLeft(rightDeadzone, 318 + (108 / 2) - rightDeadzone.Width / 2);
+            }
+            catch (Exception ex)
+            {
+            }
+        }
+
+        private void rightDeadzone_Initialized(object sender, EventArgs e)
+        {
+            showDeadzone();
         }
     }
 
