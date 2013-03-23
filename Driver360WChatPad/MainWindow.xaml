@@ -13,7 +13,7 @@
         <TextBox Height="27" HorizontalAlignment="Left" Margin="709,-63,0,0" Name="textBox2" VerticalAlignment="Top" Width="40" Text="0" Grid.Column="1" Visibility="Hidden" />
         <TextBox Height="27" HorizontalAlignment="Left" Margin="755,-63,0,0" Name="textBox3" VerticalAlignment="Top" Width="40" Text="0" Grid.Column="1" Visibility="Hidden" />
         <TextBox Height="27" HorizontalAlignment="Left" Margin="801,-63,0,0" Name="textBox4" VerticalAlignment="Top" Width="40" Text="0" Grid.Column="1" Visibility="Hidden" />
-        <Button Content="Send Binary" Height="27" HorizontalAlignment="Left" Margin="1031,-63,0,0" Name="button6" VerticalAlignment="Top" Width="230" Grid.Column="1" Click="SendTextBoxToDevice_Click" Visibility="Hidden" />
+        <Button Content="Send Binary" Height="27" HorizontalAlignment="Left" Margin="1031,-63,0,0" Name="button6" VerticalAlignment="Top" Width="230" Grid.Column="1" Visibility="Hidden" />
         <Image Height="472" HorizontalAlignment="Left" Margin="708,68,0,0" Name="image1" Stretch="Fill" VerticalAlignment="Top" Width="603" Source="/Driver360WChatPad;component/Images/controllerwchatpad.jpg" Grid.Column="1" Grid.RowSpan="2" Canvas.Left="-696" Canvas.Top="3" />
         <Button Content="Backlight" Height="27" Margin="829,218,378,0" Name="button10" VerticalAlignment="Top" Grid.Column="1" Click="Backlight_Click" Grid.Row="1" Canvas.Left="-527" Canvas.Top="330" Width="105" Foreground="White" Background="#FF9A9A9A" />
         <TextBox Height="27" HorizontalAlignment="Left" Margin="847,-63,0,0" Name="textBox5" Text="0" VerticalAlignment="Top" Width="40" Grid.Column="1" Visibility="Hidden" />

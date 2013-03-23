@@ -14,12 +14,19 @@ namespace Driver360WChatPad
         private DataView dv;
         public ChatpadController()
         {
-            dt.Columns.Add(new DataColumn("ID", typeof(int)));
-            dt.Columns.Add(new DataColumn("Map", typeof(string)));
-            dt.Columns.Add(new DataColumn("OrangeModifier", typeof(string)));
-            dt.Columns.Add(new DataColumn("GreenModifier", typeof(string)));
-            dt.ReadXml("ChatPadMappings.xml");
-            dv = new DataView(dt);
+            try
+            {
+                dt.Columns.Add(new DataColumn("ID", typeof(int)));
+                dt.Columns.Add(new DataColumn("Map", typeof(string)));
+                dt.Columns.Add(new DataColumn("OrangeModifier", typeof(string)));
+                dt.Columns.Add(new DataColumn("GreenModifier", typeof(string)));
+                dt.ReadXml("ChatPadMappings.xml");
+                dv = new DataView(dt);
+            }
+            catch (Exception e)
+            {
+                ErrorLogging.WriteLogEntry(String.Format("General error during XML Mapping initializing ChatpadController class: {0}", e.InnerException), ErrorLogging.LogLevel.Fatal);
+            }
         }
         public string GetChatPadKeyValue(string value,bool orangeModifer, bool greenModifer) 
         {
@@ -42,7 +49,8 @@ namespace Driver360WChatPad
             catch (IndexOutOfRangeException iorex)
             {
                 //Value from chat pad not recognized, should not be possible, yeah right
-                throw new Exception("Chatpad Data Not Recognized", iorex);
+                ErrorLogging.WriteLogEntry(String.Format("Chatpad data not recognized: {0}", iorex.InnerException), ErrorLogging.LogLevel.Error);
+                return "";
             }
         }
     }

@@ -93,6 +93,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ChatpadController.cs" />
+    <Compile Include="ErrorLogging.cs" />
     <Compile Include="InputValidation.cs" />
     <Compile Include="JoystickController.cs" />
     <Compile Include="MainWindow.xaml.cs">

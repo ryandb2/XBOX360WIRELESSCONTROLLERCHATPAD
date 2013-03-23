@@ -257,87 +257,25 @@ namespace Driver360WChatPad
                 //Thread.Sleep(DateTime.Now.AddMilliseconds(50)-lastEvent);
             }
             int bytesWritten = 0;
-            ErrorCode ec = writer.Write(dataToSend, 2000, out bytesWritten);
-            if (ec != ErrorCode.None)
+            try
             {
-                throw new Exception(UsbDevice.LastErrorString);
+                ErrorCode ec = writer.Write(dataToSend, 2000, out bytesWritten);
+                if (ec != ErrorCode.None)
+                {
+                    ErrorLogging.WriteLogEntry(String.Format("General error during SendDataToDevice of MainWindow class, Error Code: {0}",ec.ToString()), ErrorLogging.LogLevel.Error);
+                }
             }
-            if (requestDescription != "" && requestDescription != String.Empty)
+            catch (Exception e)
             {
-                //SetLog(requestDescription);
+
+                ErrorLogging.WriteLogEntry(String.Format("General error during SendDataToDevice of MainWindow class: {0}", e.InnerException), ErrorLogging.LogLevel.Error);
             }
             lastEvent = DateTime.Now;
-        }
-        private void LoopArray()
-        {
-            byte[] bytearray = new byte[4];
-            bytearray[0] = 0;
-            bytearray[1] = 0;
-            bytearray[2] = 0;
-            bytearray[3] = 0;
-            for (int i = Convert.ToInt32(textBox1.Text); i < 255; i++)
-            {
-                for (int j = Convert.ToInt32(textBox2.Text); j < 255; j++)
-                {
-                    for (int k = Convert.ToInt32(textBox3.Text); k < 255; k++)
-                    {
-                        for (int l = Convert.ToInt32(textBox4.Text); l < 255; l++)
-                        {
-                            bytearray[3] = (byte)l;
-                            if (bytearray[2] != 8 && bytearray[3] != 192)
-                            {
-                                SendDataToDevice(bytearray, "");
-                            }
-                        }
-                        bytearray[2] = (byte)k;
-                        if (bytearray[2] != 8 && bytearray[3] != 192)
-                        {
-                            SendDataToDevice(bytearray, "");
-                        }
-                    }
-                    bytearray[1] = (byte)j;
-                    if (bytearray[2] != 8 && bytearray[3] != 192)
-                    {
-                        SendDataToDevice(bytearray, "");
-                    }
-                }
-                bytearray[0] = (byte)i;
-                if (bytearray[2] != 8 && bytearray[3] != 192)
-                {
-                    SendDataToDevice(bytearray, "");
-                }
-            }
         }
         //Handle Non-UI Working Events
         public void KeepAliveInitial(){ SendDataToDevice(InputValidation.KeepAliveInitial(), "");}
         public void KeepAliveAlternate() { SendDataToDevice(InputValidation.KeepAliveAlternate(), ""); }
         //Handle UI Working Events
-        private void LoopAndSendToDevice_Click(object sender, RoutedEventArgs e)
-        {
-            ThreadStart startLog = delegate()
-            {
-                Dispatcher.Invoke(DispatcherPriority.Normal, new Action(LoopArray));
-            };
-            new Thread(startLog).Start();
-        }
-        private void SendTextBoxToDevice_Click(object sender, RoutedEventArgs e)
-        {
-            byte[] bytearray = new byte[8];
-            bytearray[0] = (byte)int.Parse(textBox1.Text, System.Globalization.NumberStyles.HexNumber);
-            bytearray[1] = (byte)int.Parse(textBox2.Text, System.Globalization.NumberStyles.HexNumber);
-            bytearray[2] = (byte)int.Parse(textBox3.Text, System.Globalization.NumberStyles.HexNumber);
-            bytearray[3] = (byte)int.Parse(textBox4.Text, System.Globalization.NumberStyles.HexNumber);
-            bytearray[4] = (byte)int.Parse(textBox5.Text, System.Globalization.NumberStyles.HexNumber);
-            bytearray[5] = (byte)int.Parse(textBox6.Text, System.Globalization.NumberStyles.HexNumber);
-            bytearray[6] = (byte)int.Parse(textBox7.Text, System.Globalization.NumberStyles.HexNumber);
-            bytearray[7] = (byte)int.Parse(textBox8.Text, System.Globalization.NumberStyles.HexNumber);
-            SendDataToDevice(bytearray, "");
-        }
-        private void Player1_Click(object sender, RoutedEventArgs e){SendDataToDevice(InputValidation.Player(1), "Select Player 1");}
-        private void Player2_Click(object sender, RoutedEventArgs e){SendDataToDevice(InputValidation.Player(2), "Select Player 2");}
-        private void Player3_Click(object sender, RoutedEventArgs e){SendDataToDevice(InputValidation.Player(3), "Select Player 3");}
-        private void Player4_Click(object sender, RoutedEventArgs e){SendDataToDevice(InputValidation.Player(4), "Select Player 4");}
-        private void PlayerSearch_Click(object sender, RoutedEventArgs e){SendDataToDevice(InputValidation.PlayerSearch(), "Select Player");}
         private void Backlight_Click(object sender, RoutedEventArgs e){SendDataToDevice(InputValidation.BacklightOn(), "Illuminate Backlight");}
         public void EnableBacklight_Click(object sender, RoutedEventArgs e){SendDataToDevice(InputValidation.EnableBacklight(), "Illuminate Backlight on Key Press");}
         public void CapsLockModifier()
@@ -368,13 +306,13 @@ namespace Driver360WChatPad
         }
         private void ValidateRegistrySettings()
         {
-            RegistryKey reg = Registry.LocalMachine;
+            /*RegistryKey reg = Registry.LocalMachine;
             RegistryKey rk = reg.OpenSubKey(@"SYSTEM\CurrentControlSet\services\vjoy\Parameters\Device01", true);
             string s = BitConverter.ToString((byte[])rk.GetValue("HidReportDesctiptor")); //Yes it is spelled wrong
             if (s != "05-01-15-00-09-04-A1-01-05-01-85-01-09-01-15-00-26-FF-7F-75-20-95-01-A1-00-09-30-81-02-09-31-81-02-09-32-81-02-09-33-81-02-09-34-81-02-09-35-81-02-81-01-81-01-C0-75-20-95-04-81-01-05-09-15-00-25-01-55-00-65-00-19-01-29-20-75-01-95-20-81-02-C0")
             {
                 //rk.SetValue("HidReportDesctiptor", "05-01-15-00-09-04-A1-01-05-01-85-01-09-01-15-00-26-FF-7F-75-20-95-01-A1-00-09-30-81-02-09-31-81-02-09-32-81-02-09-33-81-02-09-34-81-02-09-35-81-02-81-01-81-01-C0-75-20-95-04-81-01-05-09-15-00-25-01-55-00-65-00-19-01-29-20-75-01-95-20-81-02-C0",RegistryValueKind.Binary);
-            }
+            }*/
         }
         private void GreenSquare_Click(object sender, RoutedEventArgs e)
         {
@@ -449,6 +387,7 @@ namespace Driver360WChatPad
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             ni.Visible = false;
+            ErrorLogging.logFile.Close();
         }
 
         private void sliderDeadZone_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -476,6 +415,7 @@ namespace Driver360WChatPad
             }
             catch (Exception ex)
             {
+                ErrorLogging.WriteLogEntry(String.Format("UI Elements not available for deadzone init: {0}", ex.InnerException), ErrorLogging.LogLevel.Warning);
             }
         }
 
