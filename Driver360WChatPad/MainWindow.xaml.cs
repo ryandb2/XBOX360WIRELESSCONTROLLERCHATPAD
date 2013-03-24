@@ -60,18 +60,18 @@ namespace Driver360WChatPad
                 MyUsbDevice = UsbDevice.OpenUsbDevice(MyUsbFinder);
                 if (MyUsbDevice == null) //support other product id (knock-off?)
                 {
+                    ErrorLogging.WriteLogEntry("USB Device (1118,1817) not found: ", ErrorLogging.LogLevel.Fatal);
                     MyUsbFinder = new UsbDeviceFinder(1118, 657);
                     MyUsbDevice = UsbDevice.OpenUsbDevice(MyUsbFinder);
                     if (MyUsbDevice == null)
                     {
-                        ErrorLogging.WriteLogEntry("USB Device not found: ", ErrorLogging.LogLevel.Fatal);
+                        ErrorLogging.WriteLogEntry("USB Device (1118,657) not found: ", ErrorLogging.LogLevel.Fatal);
                     }
-                }
-                
+                }                
             }
             catch (Exception e)
             {
-                ErrorLogging.WriteLogEntry(String.Format("USB Device not found: {0}", e.InnerException), ErrorLogging.LogLevel.Fatal);
+                ErrorLogging.WriteLogEntry(String.Format("No USB Device found: {0}", e.InnerException), ErrorLogging.LogLevel.Fatal);
             }
             try
             {
@@ -86,9 +86,6 @@ namespace Driver360WChatPad
                         writer = MyUsbDevice.OpenEndpointWriter(WriteEndpointID.Ep01);
                         reader.DataReceived += new EventHandler<EndpointDataEventArgs>(reader_DataReceived);
                         reader.DataReceivedEnabled = true;
-                        timer.Start();
-                        InitializeChatpad();
-                        InitializeController();
                     }
                     catch (Exception e)
                     {
@@ -103,6 +100,16 @@ namespace Driver360WChatPad
             catch (Exception e)
             {
                 ErrorLogging.WriteLogEntry(String.Format("Failure converting usb device to whole usb device: {0}", e.InnerException), ErrorLogging.LogLevel.Fatal);
+            }
+            try
+            {
+                timer.Start();
+                InitializeChatpad();
+                InitializeController();
+            }
+            catch (Exception e)
+            {
+                ErrorLogging.WriteLogEntry(String.Format("Error in init of chatpad or controller: {0}", e.InnerException), ErrorLogging.LogLevel.Fatal);
             }
             timer.Tick += new EventHandler(dispatcherTimer_Tick);
             timer.Interval = new TimeSpan(0, 0, 0, 1, 0);
