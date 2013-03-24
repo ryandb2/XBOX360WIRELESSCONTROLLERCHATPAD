@@ -54,27 +54,44 @@ namespace Driver360WChatPad
             jController = new JoystickController();
             cController = new ChatpadController();
             MyUsbFinder = new UsbDeviceFinder(1118, 1817);
+            MyUsbDevice = UsbDevice.OpenUsbDevice(MyUsbFinder);
+            if (MyUsbDevice == null) //support other product id (knock-off?)
+            {
+                MyUsbFinder = new UsbDeviceFinder(1118, 657);
+                MyUsbDevice = UsbDevice.OpenUsbDevice(MyUsbFinder);
+                if (MyUsbDevice == null)
+                {
+                    ErrorLogging.WriteLogEntry("USB Device not found: ", ErrorLogging.LogLevel.Fatal);
+                }
+            }
+
+            IUsbDevice wholeUsbDevice = MyUsbDevice as IUsbDevice;
+
             timer.Tick += new EventHandler(dispatcherTimer_Tick);
             timer.Interval = new TimeSpan(0, 0, 0, 1, 0);
-            MyUsbDevice = UsbDevice.OpenUsbDevice(MyUsbFinder);
-            if (MyUsbDevice == null) throw new Exception("Device Not Found");
-            IUsbDevice wholeUsbDevice = MyUsbDevice as IUsbDevice;
 
             if (!ReferenceEquals(wholeUsbDevice, null))
             {
-                wholeUsbDevice.SetConfiguration(1);
-                wholeUsbDevice.ClaimInterface(0);
-                reader = MyUsbDevice.OpenEndpointReader(ReadEndpointID.Ep01);
-                writer = MyUsbDevice.OpenEndpointWriter(WriteEndpointID.Ep01);
-                reader.DataReceived += new EventHandler<EndpointDataEventArgs>(reader_DataReceived);
-                reader.DataReceivedEnabled = true;
-                timer.Start();
-                InitializeChatpad();
-                InitializeController();
+                try
+                {
+                    wholeUsbDevice.SetConfiguration(1);
+                    wholeUsbDevice.ClaimInterface(0);
+                    reader = MyUsbDevice.OpenEndpointReader(ReadEndpointID.Ep01);
+                    writer = MyUsbDevice.OpenEndpointWriter(WriteEndpointID.Ep01);
+                    reader.DataReceived += new EventHandler<EndpointDataEventArgs>(reader_DataReceived);
+                    reader.DataReceivedEnabled = true;
+                    timer.Start();
+                    InitializeChatpad();
+                    InitializeController();
+                }
+                catch (Exception e)
+                {
+                    ErrorLogging.WriteLogEntry(String.Format("Error opening endpoints: {0}", e.InnerException), ErrorLogging.LogLevel.Fatal);
+                }
             }
             else
             {
-                throw new Exception("Whole USB Device is not implemented");
+                ErrorLogging.WriteLogEntry("Whole USB device is not implemented", ErrorLogging.LogLevel.Error);
             }
             ni.Icon = new Icon(@"Images\controller.ico");
             ni.Visible = true;
@@ -388,6 +405,7 @@ namespace Driver360WChatPad
         {
             ni.Visible = false;
             ErrorLogging.logFile.Close();
+            System.Windows.Application.Current.Shutdown();
         }
 
         private void sliderDeadZone_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -424,304 +442,6 @@ namespace Driver360WChatPad
             showDeadzone();
         }
     }
-
-        ////   private void ChatPadAuthorization()
-        ////{
-        ////    // 1. -> Vendor request IN EP0 (0x01) 
-        ////    //       -> SETUP C0 01 00 00 00 00 04 00
-        ////    //       <- IN    80 03 0D 47
-        ////    byte[] bytearray8 = new byte[8];
-        ////    bytearray8[0] = 192;
-        ////    bytearray8[1] = 1;
-        ////    bytearray8[2] = 0;
-        ////    bytearray8[3] = 0;
-        ////    bytearray8[4] = 0;
-        ////    bytearray8[5] = 0;
-        ////    bytearray8[6] = 4;
-        ////    bytearray8[7] = 0;
-        ////    SendDataToDevice(bytearray8, "Authorize");
-        ////    // 2. -> Vendor request OUT EP0 (0xA9)
-        ////    //       -> 40 A9 0C A3 23 44 00
-        ////    //       <- Expect STALLED no data
-        ////    byte[] bytearray4 = new byte[4];
-        ////    bytearray4[0] = 128;
-        ////    bytearray4[1] = 3;
-        ////    bytearray4[2] = 13;
-        ////    bytearray4[3] = 71;
-        ////    SendDataToDevice(bytearray4, "Authorize");
-        ////    // 3. -> Vendor request OUT EP0 (0xA9)
-        ////    //       -> 40 A9 44 23 03 7F 00 00
-        ////    //       <- Expect STALLED no data
-        ////    byte[] bytearray7 = new byte[7];
-        ////    bytearray7[0] = 64;
-        ////    bytearray7[1] = 169;
-        ////    bytearray7[2] = 12;
-        ////    bytearray7[3] = 163;
-        ////    bytearray7[4] = 35;
-        ////    bytearray7[5] = 68;
-        ////    bytearray7[6] = 0;
-        ////    SendDataToDevice(bytearray7, "Authorize");
-        ////    // 4. -> Vendor request OUT EP0 (0xA9)
-        ////    //       -> 40 A9 39 58 32 68 00 00
-        ////    //       <- Expect STALLED no data
-        ////    bytearray8 = new byte[8];
-        ////    bytearray8[0] = 64;
-        ////    bytearray8[1] = 169;
-        ////    bytearray8[2] = 68;
-        ////    bytearray8[3] = 35;
-        ////    bytearray8[4] = 3;
-        ////    bytearray8[5] = 127;
-        ////    bytearray8[6] = 0;
-        ////    bytearray8[7] = 0;
-        ////    SendDataToDevice(bytearray8, "Authorize");
-
-        ////    bytearray8 = new byte[8];
-        ////    bytearray8[0] = 64;
-        ////    bytearray8[1] = 169;
-        ////    bytearray8[2] = 57;
-        ////    bytearray8[3] = 88;
-        ////    bytearray8[4] = 50;
-        ////    bytearray8[5] = 104;
-        ////    bytearray8[6] = 0;
-        ////    bytearray8[7] = 0;
-        ////    SendDataToDevice(bytearray8, "Authorize");
-
-        ////    // 5. <- IN IF:0 EP2 3 bytes 01 03 0E
-        ////    byte[] bytearray3 = new byte[3];
-        ////    bytearray3[0] = 1;
-        ////    bytearray3[1] = 3;
-        ////    bytearray3[2] = 14;
-        ////    SendDataToDevice(bytearray3, "Authorize");
-        ////    // 6. -> Vendor request IN EP0 (0xA1) 
-        ////    //       -> SETUP C0 A1 00 00 16 E4 02 00
-        ////    //       <- IN    01 00
-        ////    bytearray8 = new byte[8];
-        ////    bytearray8[0] = 192;
-        ////    bytearray8[1] = 161;
-        ////    bytearray8[2] = 0;
-        ////    bytearray8[3] = 0;
-        ////    bytearray8[4] = 22;
-        ////    bytearray8[5] = 228;
-        ////    bytearray8[6] = 2;
-        ////    bytearray8[7] = 0;
-        ////    SendDataToDevice(bytearray8, "Authorize");
-            
-        ////    byte[] bytearray2 = new byte[2];
-        ////    bytearray2[0] = 1;
-        ////    bytearray2[1] = 0;
-        ////    SendDataToDevice(bytearray2, "Authorize");
-        ////    // 7. -> OUT IF:0 EP1 3 bytes 01 03 01
-        ////    bytearray3 = new byte[3];
-        ////    bytearray3[0] = 1;
-        ////    bytearray3[1] = 3;
-        ////    bytearray3[2] = 1;
-        ////    SendDataToDevice(bytearray3, "Authorize");
-        ////    // 8. -> Vendor request OUT EP0 (0xA1)
-        ////    //       -> SETUP 40 A1 00 00 16 E4 02 00
-        ////    //       -> OUT   09 00 
-        ////    bytearray8 = new byte[8];
-        ////    bytearray8[0] = 64;
-        ////    bytearray8[1] = 161;
-        ////    bytearray8[2] = 0;
-        ////    bytearray8[3] = 0;
-        ////    bytearray8[4] = 22;
-        ////    bytearray8[5] = 228;
-        ////    bytearray8[6] = 2;
-        ////    bytearray8[7] = 0;
-        ////    SendDataToDevice(bytearray8, "Authorize");
-
-        ////    bytearray2 = new byte[2];
-        ////    bytearray2[0] = 9;
-        ////    bytearray2[1] = 0;
-        ////    SendDataToDevice(bytearray2, "Authorize");
-        ////    // 9. -> Vendor request IN EP0 (0xA1)
-        ////    //       -> SETUP C0 A1 00 00 16 E4 02 00
-        ////    //       -> IN    09 00                   (echo previous OUT?)
-        ////    bytearray8 = new byte[8];
-        ////    bytearray8[0] = 192;
-        ////    bytearray8[1] = 161;
-        ////    bytearray8[2] = 0;
-        ////    bytearray8[3] = 0;
-        ////    bytearray8[4] = 22;
-        ////    bytearray8[5] = 228;
-        ////    bytearray8[6] = 2;
-        ////    bytearray8[7] = 0;
-        ////    SendDataToDevice(bytearray8, "Authorize");
-
-        ////    bytearray2 = new byte[2];
-        ////    bytearray2[0] = 9;
-        ////    bytearray2[1] = 0;
-        ////    SendDataToDevice(bytearray2, "Authorize");
-        ////    //10. <- IN IF:0 EP 1 3 bytes 02 03 00
-        ////    bytearray3 = new byte[3];
-        ////    bytearray3[0] = 2;
-        ////    bytearray3[1] = 3;
-        ////    bytearray3[2] = 0;
-        ////    SendDataToDevice(bytearray3, "Authorize");
-        ////    //11. <- IN IF:0 EP 1 3 bytes 03 03 03
-        ////    bytearray3 = new byte[3];
-        ////    bytearray3[0] = 3;
-        ////    bytearray3[1] = 3;
-        ////    bytearray3[2] = 3;
-        ////    SendDataToDevice(bytearray3, "Authorize");
-        ////    //12. <- IN IF:0 EP 1 3 bytes 08 03 00
-        ////    bytearray3 = new byte[3];
-        ////    bytearray3[0] = 8;
-        ////    bytearray3[1] = 3;
-        ////    bytearray3[2] = 0;
-        ////    SendDataToDevice(bytearray3, "Authorize");
-        ////    //13. <- IN IF:0 EP 1 3 bytes 01 03 01
-        ////    bytearray3 = new byte[3];
-        ////    bytearray3[0] = 1;
-        ////    bytearray3[1] = 3;
-        ////    bytearray3[2] = 1;
-        ////    SendDataToDevice(bytearray3, "Authorize");
-        ////    //14. -> Vendor request OUT EP0 (0x00)
-        ////    //       -> SETUP 41 00 1F 00 02 00 00 00
-        ////    //       -> IN No data
-        ////    bytearray8 = new byte[8];
-        ////    bytearray8[0] = 65;
-        ////    bytearray8[1] = 0;
-        ////    bytearray8[2] = 31;
-        ////    bytearray8[3] = 0;
-        ////    bytearray8[4] = 2;
-        ////    bytearray8[5] = 0;
-        ////    bytearray8[6] = 0;
-        ////    bytearray8[7] = 0;
-        ////    SendDataToDevice(bytearray8, "Authorize");
-        ////    //15. -> Vendor request OUT EP0 (0x00)
-        ////    //       -> SETUP 41 00 1E 00 02 00 00 00
-        ////    //       -> IN No data
-        ////    bytearray8 = new byte[8];
-        ////    bytearray8[0] = 65;
-        ////    bytearray8[1] = 0;
-        ////    bytearray8[2] = 30;
-        ////    bytearray8[3] = 0;
-        ////    bytearray8[4] = 2;
-        ////    bytearray8[5] = 0;
-        ////    bytearray8[6] = 0;
-        ////    bytearray8[7] = 0;
-        ////    SendDataToDevice(bytearray8, "Authorize");
-
-        ////    bytearray2 = new byte[2];
-        ////    bytearray2[0] = 94;
-        ////    bytearray2[1] = 233;
-        ////    SendDataToDevice(bytearray2, "Authorize");
-
-        ////}
-
-        ////private void button8_Click(object sender, RoutedEventArgs e)
-        ////{
-        ////    //40 A9 0C A3 23 44 00 00
-        ////    byte[] bytearray8 = new byte[8];
-        ////    bytearray8[0] = 64;
-        ////    bytearray8[1] = 169;
-        ////    bytearray8[2] = 12;
-        ////    bytearray8[3] = 163;
-        ////    bytearray8[4] = 35;
-        ////    bytearray8[5] = 68;
-        ////    bytearray8[6] = 0;
-        ////    bytearray8[7] = 0;
-        ////    SendDataToDevice(bytearray8, "Authorize");
-        ////    //40 A9 44 23 03 7F 00 00
-        ////    bytearray8 = new byte[8];
-        ////    bytearray8[0] = 64;
-        ////    bytearray8[1] = 169;
-        ////    bytearray8[2] = 68;
-        ////    bytearray8[3] = 35;
-        ////    bytearray8[4] = 3;
-        ////    bytearray8[5] = 127;
-        ////    bytearray8[6] = 0;
-        ////    bytearray8[7] = 0;
-        ////    SendDataToDevice(bytearray8, "Authorize");
-        ////    //40 A9 39 58 32 68 00 00
-        ////    bytearray8 = new byte[8];
-        ////    bytearray8[0] = 64;
-        ////    bytearray8[1] = 169;
-        ////    bytearray8[2] = 57;
-        ////    bytearray8[3] = 88;
-        ////    bytearray8[4] = 50;
-        ////    bytearray8[5] = 104;
-        ////    bytearray8[6] = 0;
-        ////    bytearray8[7] = 0;
-        ////    SendDataToDevice(bytearray8, "Authorize");
-        ////    //C0 A1 00 00 16 E4 02 00
-        ////    bytearray8 = new byte[8];
-        ////    bytearray8[0] = 192;
-        ////    bytearray8[1] = 161;
-        ////    bytearray8[2] = 0;
-        ////    bytearray8[3] = 0;
-        ////    bytearray8[4] = 22;
-        ////    bytearray8[5] = 228;
-        ////    bytearray8[6] = 2;
-        ////    bytearray8[7] = 0;
-        ////    SendDataToDevice(bytearray8, "Authorize");
-        ////}
-
-        ////private void button9_Click(object sender, RoutedEventArgs e)
-        ////{
-        ////    //87 02 8C 1F CC
-        ////    byte[] bytearray5 = new byte[5];
-        ////    bytearray5[0] = 135;
-        ////    bytearray5[1] = 2;
-        ////    bytearray5[2] = 140;
-        ////    bytearray5[3] = 31;
-        ////    bytearray5[4] = 204;
-        ////    SendDataToDevice(bytearray5, "Authorize");
-        ////    //87 02 8C 1B D0
-        ////    bytearray5 = new byte[5];
-        ////    bytearray5[0] = 135;
-        ////    bytearray5[1] = 2;
-        ////    bytearray5[2] = 140;
-        ////    bytearray5[3] = 27;
-        ////    bytearray5[4] = 208;
-        ////    SendDataToDevice(bytearray5, "Authorize");
-        ////}
-    //public void StartCodes()
-    //    {
-    //        //SendControlRequest(hChatpadDevice, MAIN_INTERFACE, 0x40, 0xa9, 0xa30c, 0x4423, 0x0000);
-    //        //SendControlRequest(hChatpadDevice, MAIN_INTERFACE, 0x40, 0xa9, 0x2344, 0x7f03, 0x0000);
-    //        //SendControlRequest(hChatpadDevice, MAIN_INTERFACE, 0x40, 0xa9, 0x5839, 0x6832, 0x0000);
-    //        //40 A9 A3 0C 44 23 00 00
-    //        byte[] temparray = new byte[10];
-    //        temparray[0] = 64;
-    //        temparray[1] = 169;
-    //        temparray[2] = 12;
-    //        temparray[3] = 30;
-    //        temparray[4] = 0;
-    //        temparray[5] = 0;
-    //        temparray[6] = 0;
-    //        temparray[7] = 0;
-    //        temparray[8] = 0;
-    //        temparray[9] = 0;
-    //        SendDataToDevice(temparray,"Start Code 1");
-
-    //        temparray = new byte[10];
-    //        temparray[0] = 64;
-    //        temparray[1] = 169;
-    //        temparray[2] = 35;
-    //        temparray[3] = 68;
-    //        temparray[4] = 127;
-    //        temparray[5] = 3;
-    //        temparray[6] = 0;
-    //        temparray[7] = 0;
-    //        temparray[8] = 0;
-    //        temparray[9] = 0;
-    //        SendDataToDevice(temparray, "Start Code 2");
-
-    //        temparray = new byte[10];
-    //        temparray[0] = 64;
-    //        temparray[1] = 169;
-    //        temparray[2] = 88;
-    //        temparray[3] = 57;
-    //        temparray[4] = 104;
-    //        temparray[5] = 50;
-    //        temparray[6] = 0;
-    //        temparray[7] = 0;
-    //        temparray[8] = 0;
-    //        temparray[9] = 0;
-    //        SendDataToDevice(temparray, "Start Code 3");
-    //    }
 }
 
 

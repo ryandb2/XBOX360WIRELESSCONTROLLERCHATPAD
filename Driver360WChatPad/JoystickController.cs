@@ -102,7 +102,8 @@ namespace Driver360WChatPad
             catch (IndexOutOfRangeException iorex)
             {
                 //Value from chat pad not recognized
-                throw new Exception("Joystick Data Not Recognized", iorex);
+                ErrorLogging.WriteLogEntry("Joystick data not recognized {0}", ErrorLogging.LogLevel.Error);
+                throw new Exception("Joystick data not recognized", iorex);
             }
         }
         public void ButtonToggle(uint joystickIndex, uint value, bool isPressed)
