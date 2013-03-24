@@ -47,3 +47,94 @@
 3/24/2013 4:27:08 AM - Warning  UI Elements not available for deadzone init: 
 3/24/2013 4:27:08 AM - Information  Vendor: Shaul Eizikovich Product :vJoy - Virtual Joystick Version Number:2.0.2 
 3/24/2013 4:27:08 AM - Error  vJoy Device 0 unknown error
+3/24/2013 4:39:16 PM - Warning  UI Elements not available for deadzone init: 
+3/24/2013 4:39:16 PM - Warning  UI Elements not available for deadzone init: 
+3/24/2013 4:39:16 PM - Warning  UI Elements not available for deadzone init: 
+3/24/2013 4:39:17 PM - Information  Vendor: Shaul Eizikovich Product :vJoy - Virtual Joystick Version Number:2.0.2 
+3/24/2013 4:39:17 PM - Error  vJoy Device 0 unknown error
+3/24/2013 4:44:40 PM - Warning  UI Elements not available for deadzone init: 
+3/24/2013 4:44:40 PM - Warning  UI Elements not available for deadzone init: 
+3/24/2013 4:44:40 PM - Warning  UI Elements not available for deadzone init: 
+3/24/2013 4:44:40 PM - Information  Vendor: Shaul Eizikovich Product :vJoy - Virtual Joystick Version Number:2.0.2 
+3/24/2013 4:44:40 PM - Error  vJoy Device 0 unknown error
+3/24/2013 4:45:50 PM - Warning  UI Elements not available for deadzone init: 
+3/24/2013 4:45:50 PM - Warning  UI Elements not available for deadzone init: 
+3/24/2013 4:45:50 PM - Warning  UI Elements not available for deadzone init: 
+3/24/2013 4:45:50 PM - Information  Vendor: Shaul Eizikovich Product :vJoy - Virtual Joystick Version Number:2.0.2 
+3/24/2013 4:45:50 PM - Error  vJoy Device 0 unknown error
+3/24/2013 4:47:13 PM - Warning  UI Elements not available for deadzone init: 
+3/24/2013 4:47:13 PM - Warning  UI Elements not available for deadzone init: 
+3/24/2013 4:47:13 PM - Warning  UI Elements not available for deadzone init: 
+3/24/2013 4:47:13 PM - Information  Vendor: Shaul Eizikovich Product :vJoy - Virtual Joystick Version Number:2.0.2 
+3/24/2013 4:47:13 PM - Error  vJoy Device 0 unknown error
+3/24/2013 4:47:32 PM - Warning  UI Elements not available for deadzone init: 
+3/24/2013 4:47:32 PM - Warning  UI Elements not available for deadzone init: 
+3/24/2013 4:47:32 PM - Warning  UI Elements not available for deadzone init: 
+3/24/2013 4:47:32 PM - Information  Vendor: Shaul Eizikovich Product :vJoy - Virtual Joystick Version Number:2.0.2 
+3/24/2013 4:47:32 PM - Error  vJoy Device 0 unknown error
+3/24/2013 4:48:08 PM - Warning  UI Elements not available for deadzone init: 
+3/24/2013 4:48:08 PM - Warning  UI Elements not available for deadzone init: 
+3/24/2013 4:48:08 PM - Warning  UI Elements not available for deadzone init: 
+3/24/2013 4:48:08 PM - Information  Vendor: Shaul Eizikovich Product :vJoy - Virtual Joystick Version Number:2.0.2 
+3/24/2013 4:48:08 PM - Error  vJoy Device 0 unknown error
+3/24/2013 4:48:23 PM - Warning  UI Elements not available for deadzone init: 
+3/24/2013 4:48:23 PM - Warning  UI Elements not available for deadzone init: 
+3/24/2013 4:48:23 PM - Warning  UI Elements not available for deadzone init: 
+3/24/2013 4:48:23 PM - Information  Vendor: Shaul Eizikovich Product :vJoy - Virtual Joystick Version Number:2.0.2 
+3/24/2013 4:48:23 PM - Error  vJoy Device 0 unknown error
+3/24/2013 4:49:14 PM - Warning  UI Elements not available for deadzone init: 
+3/24/2013 4:49:14 PM - Warning  UI Elements not available for deadzone init: 
+3/24/2013 4:49:14 PM - Warning  UI Elements not available for deadzone init: 
+3/24/2013 4:49:14 PM - Information  Vendor: Shaul Eizikovich Product :vJoy - Virtual Joystick Version Number:2.0.2 
+3/24/2013 4:49:14 PM - Error  vJoy Device 0 unknown error
+3/24/2013 4:50:50 PM - Warning  UI Elements not available for deadzone init: 
+3/24/2013 4:50:50 PM - Warning  UI Elements not available for deadzone init: 
+3/24/2013 4:50:50 PM - Warning  UI Elements not available for deadzone init: 
+3/24/2013 4:50:50 PM - Information  Vendor: Shaul Eizikovich Product :vJoy - Virtual Joystick Version Number:2.0.2 
+3/24/2013 4:50:50 PM - Error  vJoy Device 0 unknown error
+3/24/2013 4:50:58 PM - Warning  UI Elements not available for deadzone init: 
+3/24/2013 4:50:58 PM - Warning  UI Elements not available for deadzone init: 
+3/24/2013 4:50:58 PM - Warning  UI Elements not available for deadzone init: 
+3/24/2013 4:50:58 PM - Information  Vendor: Shaul Eizikovich Product :vJoy - Virtual Joystick Version Number:2.0.2 
+3/24/2013 4:50:58 PM - Error  vJoy Device 0 unknown error
+3/24/2013 4:52:05 PM - Warning  UI Elements not available for deadzone init: 
+3/24/2013 4:52:05 PM - Warning  UI Elements not available for deadzone init: 
+3/24/2013 4:52:05 PM - Warning  UI Elements not available for deadzone init: 
+3/24/2013 4:52:05 PM - Information  Vendor: Shaul Eizikovich Product :vJoy - Virtual Joystick Version Number:2.0.2 
+3/24/2013 4:52:05 PM - Error  vJoy Device 0 unknown error
+3/24/2013 4:52:05 PM - Fatal  General uncaught exception: System.InvalidOperationException: WindowStyle.None is the only valid value for WindowStyle when AllowsTransparency is true.
+   at System.Windows.Window.VerifyConsistencyWithAllowsTransparency(WindowStyle style)
+   at System.Windows.Window.CoerceVisibility(DependencyObject d, Object value)
+   at System.Windows.DependencyObject.ProcessCoerceValue(DependencyProperty dp, PropertyMetadata metadata, EntryIndex& entryIndex, Int32& targetIndex, EffectiveValueEntry& newEntry, EffectiveValueEntry& oldEntry, Object& oldValue, Object baseValue, Object controlValue, CoerceValueCallback coerceValueCallback, Boolean coerceWithDeferredReference, Boolean coerceWithCurrentValue, Boolean skipBaseValueChecks)
+   at System.Windows.DependencyObject.UpdateEffectiveValue(EntryIndex entryIndex, DependencyProperty dp, PropertyMetadata metadata, EffectiveValueEntry oldEntry, EffectiveValueEntry& newEntry, Boolean coerceWithDeferredReference, Boolean coerceWithCurrentValue, OperationType operationType)
+   at System.Windows.DependencyObject.SetValueCommon(DependencyProperty dp, Object value, PropertyMetadata metadata, Boolean coerceWithDeferredReference, Boolean coerceWithCurrentValue, OperationType operationType, Boolean isInternal)
+   at System.Windows.Application.ConfigAppWindowAndRootElement(Object root, Uri uri)
+   at System.Windows.Application.DoStartup()
+   at System.Windows.Application.<.ctor>b__1(Object unused)
+   at System.Windows.Threading.ExceptionWrapper.InternalRealCall(Delegate callback, Object args, Int32 numArgs)
+   at MS.Internal.Threading.ExceptionFilterHelper.TryCatchWhen(Object source, Delegate method, Object args, Int32 numArgs, Delegate catchHandler) 
+3/24/2013 4:52:22 PM - Warning  UI Elements not available for deadzone init: 
+3/24/2013 4:52:22 PM - Warning  UI Elements not available for deadzone init: 
+3/24/2013 4:52:22 PM - Warning  UI Elements not available for deadzone init: 
+3/24/2013 4:52:22 PM - Information  Vendor: Shaul Eizikovich Product :vJoy - Virtual Joystick Version Number:2.0.2 
+3/24/2013 4:52:22 PM - Error  vJoy Device 0 unknown error
+3/24/2013 4:56:48 PM - Warning  UI Elements not available for deadzone init: 
+3/24/2013 4:56:48 PM - Warning  UI Elements not available for deadzone init: 
+3/24/2013 4:56:48 PM - Warning  UI Elements not available for deadzone init: 
+3/24/2013 4:56:48 PM - Information  Vendor: Shaul Eizikovich Product :vJoy - Virtual Joystick Version Number:2.0.2 
+3/24/2013 4:56:48 PM - Error  vJoy Device 0 unknown error
+3/24/2013 4:58:37 PM - Warning  UI Elements not available for deadzone init: 
+3/24/2013 4:58:37 PM - Warning  UI Elements not available for deadzone init: 
+3/24/2013 4:58:37 PM - Warning  UI Elements not available for deadzone init: 
+3/24/2013 4:58:37 PM - Information  Vendor: Shaul Eizikovich Product :vJoy - Virtual Joystick Version Number:2.0.2 
+3/24/2013 4:58:37 PM - Error  vJoy Device 0 unknown error
+3/24/2013 4:59:59 PM - Warning  UI Elements not available for deadzone init: 
+3/24/2013 4:59:59 PM - Warning  UI Elements not available for deadzone init: 
+3/24/2013 4:59:59 PM - Warning  UI Elements not available for deadzone init: 
+3/24/2013 4:59:59 PM - Information  Vendor: Shaul Eizikovich Product :vJoy - Virtual Joystick Version Number:2.0.2 
+3/24/2013 4:59:59 PM - Error  vJoy Device 0 unknown error
+3/24/2013 5:00:09 PM - Warning  UI Elements not available for deadzone init: 
+3/24/2013 5:00:09 PM - Warning  UI Elements not available for deadzone init: 
+3/24/2013 5:00:09 PM - Warning  UI Elements not available for deadzone init: 
+3/24/2013 5:00:09 PM - Information  Vendor: Shaul Eizikovich Product :vJoy - Virtual Joystick Version Number:2.0.2 
+3/24/2013 5:00:09 PM - Error  vJoy Device 0 unknown error

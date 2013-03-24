@@ -49,58 +49,71 @@ namespace Driver360WChatPad
 
         public MainWindow()
         {
+            System.Windows.Application.Current.MainWindow = this;
             InitializeComponent();
             ValidateRegistrySettings();
             jController = new JoystickController();
             cController = new ChatpadController();
-            MyUsbFinder = new UsbDeviceFinder(1118, 1817);
-            MyUsbDevice = UsbDevice.OpenUsbDevice(MyUsbFinder);
-            if (MyUsbDevice == null) //support other product id (knock-off?)
+            try
             {
-                MyUsbFinder = new UsbDeviceFinder(1118, 657);
+                MyUsbFinder = new UsbDeviceFinder(1118, 1817);
                 MyUsbDevice = UsbDevice.OpenUsbDevice(MyUsbFinder);
-                if (MyUsbDevice == null)
+                if (MyUsbDevice == null) //support other product id (knock-off?)
                 {
-                    ErrorLogging.WriteLogEntry("USB Device not found: ", ErrorLogging.LogLevel.Fatal);
+                    MyUsbFinder = new UsbDeviceFinder(1118, 657);
+                    MyUsbDevice = UsbDevice.OpenUsbDevice(MyUsbFinder);
+                    if (MyUsbDevice == null)
+                    {
+                        ErrorLogging.WriteLogEntry("USB Device not found: ", ErrorLogging.LogLevel.Fatal);
+                    }
+                }
+                
+            }
+            catch (Exception e)
+            {
+                ErrorLogging.WriteLogEntry(String.Format("USB Device not found: {0}", e.InnerException), ErrorLogging.LogLevel.Fatal);
+            }
+            try
+            {
+                IUsbDevice wholeUsbDevice = MyUsbDevice as IUsbDevice;
+                if (!ReferenceEquals(wholeUsbDevice, null))
+                {
+                    try
+                    {
+                        wholeUsbDevice.SetConfiguration(1);
+                        wholeUsbDevice.ClaimInterface(0);
+                        reader = MyUsbDevice.OpenEndpointReader(ReadEndpointID.Ep01);
+                        writer = MyUsbDevice.OpenEndpointWriter(WriteEndpointID.Ep01);
+                        reader.DataReceived += new EventHandler<EndpointDataEventArgs>(reader_DataReceived);
+                        reader.DataReceivedEnabled = true;
+                        timer.Start();
+                        InitializeChatpad();
+                        InitializeController();
+                    }
+                    catch (Exception e)
+                    {
+                        ErrorLogging.WriteLogEntry(String.Format("Error opening endpoints: {0}", e.InnerException), ErrorLogging.LogLevel.Fatal);
+                    }
+                }
+                else
+                {
+                    ErrorLogging.WriteLogEntry("Whole USB device is not implemented", ErrorLogging.LogLevel.Error);
                 }
             }
-
-            IUsbDevice wholeUsbDevice = MyUsbDevice as IUsbDevice;
-
+            catch (Exception e)
+            {
+                ErrorLogging.WriteLogEntry(String.Format("Failure converting usb device to whole usb device: {0}", e.InnerException), ErrorLogging.LogLevel.Fatal);
+            }
             timer.Tick += new EventHandler(dispatcherTimer_Tick);
             timer.Interval = new TimeSpan(0, 0, 0, 1, 0);
-
-            if (!ReferenceEquals(wholeUsbDevice, null))
-            {
-                try
-                {
-                    wholeUsbDevice.SetConfiguration(1);
-                    wholeUsbDevice.ClaimInterface(0);
-                    reader = MyUsbDevice.OpenEndpointReader(ReadEndpointID.Ep01);
-                    writer = MyUsbDevice.OpenEndpointWriter(WriteEndpointID.Ep01);
-                    reader.DataReceived += new EventHandler<EndpointDataEventArgs>(reader_DataReceived);
-                    reader.DataReceivedEnabled = true;
-                    timer.Start();
-                    InitializeChatpad();
-                    InitializeController();
-                }
-                catch (Exception e)
-                {
-                    ErrorLogging.WriteLogEntry(String.Format("Error opening endpoints: {0}", e.InnerException), ErrorLogging.LogLevel.Fatal);
-                }
-            }
-            else
-            {
-                ErrorLogging.WriteLogEntry("Whole USB device is not implemented", ErrorLogging.LogLevel.Error);
-            }
             ni.Icon = new Icon(@"Images\controller.ico");
             ni.Visible = true;
             ni.Click +=
-                delegate(object sender, EventArgs args)
-                {
-                    this.Show();
-                    this.WindowState = WindowState.Normal;
-                };
+            delegate(object sender, EventArgs args)
+            {
+                this.Show();
+                this.WindowState = WindowState.Normal;
+            };
         }
         protected override void OnStateChanged(EventArgs e)
         {
@@ -241,11 +254,12 @@ namespace Driver360WChatPad
                     updateLog.Append(e.Buffer[i].ToString());
                     updateLog.Append(" ");
                 }
-                ThreadStart startLog = delegate()
+                SetLog(updateLog.ToString());
+                /*ThreadStart startLog = delegate()
                 {
                     Dispatcher.Invoke(DispatcherPriority.Normal, new Action<string>(SetLog), updateLog.ToString());
                 };
-                new Thread(startLog).Start();
+                new Thread(startLog).Start();*/
             }
         }
         public void SetSpecialKeys()
@@ -405,7 +419,12 @@ namespace Driver360WChatPad
         {
             ni.Visible = false;
             ErrorLogging.logFile.Close();
-            System.Windows.Application.Current.Shutdown();
+            writer.Dispose();
+            reader.Dispose();
+            MyUsbDevice.Close();
+            timer.Stop();
+            timer.Dispatcher.InvokeShutdown();
+            Dispatcher.InvokeShutdown();
         }
 
         private void sliderDeadZone_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -440,6 +459,11 @@ namespace Driver360WChatPad
         private void rightDeadzone_Initialized(object sender, EventArgs e)
         {
             showDeadzone();
+        }
+
+        private void Window_Closed(object sender, EventArgs e)
+        {
+
         }
     }
 }
