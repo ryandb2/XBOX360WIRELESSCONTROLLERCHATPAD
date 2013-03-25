@@ -261,12 +261,12 @@ namespace Driver360WChatPad
                     updateLog.Append(e.Buffer[i].ToString());
                     updateLog.Append(" ");
                 }
-                SetLog(updateLog.ToString());
-                /*ThreadStart startLog = delegate()
+                //SetLog(updateLog.ToString());
+                ThreadStart startLog = delegate()
                 {
                     Dispatcher.Invoke(DispatcherPriority.Normal, new Action<string>(SetLog), updateLog.ToString());
                 };
-                new Thread(startLog).Start();*/
+                new Thread(startLog).Start();
             }
         }
         public void SetSpecialKeys()
@@ -424,14 +424,35 @@ namespace Driver360WChatPad
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            ni.Visible = false;
-            ErrorLogging.logFile.Close();
-            writer.Dispose();
-            reader.Dispose();
-            MyUsbDevice.Close();
-            timer.Stop();
-            timer.Dispatcher.InvokeShutdown();
-            Dispatcher.InvokeShutdown();
+            if (ni != null)
+            {
+                ni.Visible = false;
+            }
+            if (ErrorLogging.logFile != null)
+            {
+                ErrorLogging.logFile.Close();
+            }
+            if (writer != null)
+            {
+                writer.Dispose();
+            }
+            if (reader != null)
+            {
+                reader.Dispose();
+            }
+            if (MyUsbDevice != null)
+            {
+                MyUsbDevice.Close();
+            }
+            if (timer != null)
+            {
+                timer.Stop();
+                timer.Dispatcher.InvokeShutdown();
+            }
+            if (Dispatcher != null)
+            {
+                Dispatcher.InvokeShutdown();
+            }
         }
 
         private void sliderDeadZone_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
